@@ -14,11 +14,13 @@ class CreateAmostraAlteracao extends Migration
     public function up()
     {
         Schema::create('amostraalteracao', function (Blueprint $table) {
-            $table->integer('IdAmostra')->unsigned();
-            $table->integer('IdAltera')->unsigned();
-            $table->integer('NtAlteracao');
-            $table->primary(['IdAmostra', 'IdAltera']);
-            $table->foreign('IdAmostra')->references('IdAmostra')->on('amostraalteracaoparametro');
+            $table->integer('fk_amostra')->unsigned();
+            $table->integer('fk_alteracao')->unsigned();
+            $table->integer('nt_alteracao');
+            
+            $table->primary(['fk_amostra', 'fk_alteracao']);
+            $table->foreign('fk_amostra')->references('id_amostra')->on('amostra');
+            $table->foreign('fk_alteracao')->references('id_alteracao')->on('alteracao');
             $table->timestamps();
         });
     }

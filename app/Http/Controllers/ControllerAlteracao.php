@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Alteracao;
 use Illuminate\Http\Request;
-
+use App\Models\Alteracao as Model;
 class ControllerAlteracao extends Controller
 {
+    var $rota_list = 'alteracao';
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +15,8 @@ class ControllerAlteracao extends Controller
      */
     public function index()
     {
-        //
+        $objetos = Model::all();
+        return view($this->rota_list.'.list',compact('objetos') );
     }
 
     /**
@@ -24,7 +26,7 @@ class ControllerAlteracao extends Controller
      */
     public function create()
     {
-        //
+        return view($this->rota_list.'.create');
     }
 
     /**
@@ -35,7 +37,11 @@ class ControllerAlteracao extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $Model = new Model;
+        $Model->descricao = $request->descricao;
+
+        $Model->save();
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
     }
 
     /**
@@ -44,7 +50,7 @@ class ControllerAlteracao extends Controller
      * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function show(Alteracao $alteracao)
+    public function show($id)
     {
         //
     }
@@ -55,9 +61,10 @@ class ControllerAlteracao extends Controller
      * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function edit(Alteracao $alteracao)
+    public function edit($id)
     {
-        //
+        $objeto=Model::find($id);
+        return view($this->rota_list.'.create', compact('objeto') );
     }
 
     /**
@@ -67,9 +74,13 @@ class ControllerAlteracao extends Controller
      * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Alteracao $alteracao)
+    public function update(Request $request, $id)
     {
-        //
+        $Model = Model::find($id);
+        $Model->descricao = $request->descricao;
+
+        $Model->save();
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
     }
 
     /**
@@ -78,8 +89,17 @@ class ControllerAlteracao extends Controller
      * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Alteracao $alteracao)
+    public function destroy($id)
     {
-        //
+        $objeto=Model::find($id);
+
+        if (is_null($objeto)){
+           echo "Código Invalido";
+           return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
+        }
+
+        Model::find($id)->delete();
+
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
 }

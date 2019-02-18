@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('alteracao', 'ControllerAlteracao');
+Route::resource('amostra', 'ControllerAmostra');
+Route::resource('atividade_preponderante', 'ControllerAtividadePreponderante');
+Route::resource('categoria', 'ControllerCategoria');
+Route::resource('objetivo', 'ControllerObjetivo');
+Route::resource('parametro', 'ControllerParametro');

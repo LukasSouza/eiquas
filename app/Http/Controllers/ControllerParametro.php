@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Parametro;
 use Illuminate\Http\Request;
-
+use App\Models\Parametro as Model;
 class ControllerParametro extends Controller
 {
+    var $rota_list = 'categoria';
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +15,8 @@ class ControllerParametro extends Controller
      */
     public function index()
     {
-        //
+        $objetos = Model::all();
+        return view($this->rota_list.'.list',compact('objetos') );
     }
 
     /**
@@ -24,7 +26,7 @@ class ControllerParametro extends Controller
      */
     public function create()
     {
-        //
+        return view($this->rota_list.'.create');
     }
 
     /**
@@ -35,16 +37,24 @@ class ControllerParametro extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $Model = new Model;
+        $Model->descricao = $request->descricao;
+        $Model->unidade_medida = $request->unidade_medida;
+        $Model->numero_registro_cas = $request->numero_registro_cas;
+        $Model->limite_conama = $request->limite_conama;
+        $Model->limite_oms = $request->limite_oms;
+
+        $Model->save();
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Parametro  $parametro
+     * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function show(Parametro $parametro)
+    public function show($id)
     {
         //
     }
@@ -52,34 +62,52 @@ class ControllerParametro extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Parametro  $parametro
+     * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function edit(Parametro $parametro)
+    public function edit($id)
     {
-        //
+        $objeto=Model::find($id);
+        return view($this->rota_list.'.create', compact('objeto') );
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Parametro  $parametro
+     * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Parametro $parametro)
+    public function update(Request $request, $id)
     {
-        //
+        $Model = Model::find($id);
+        $Model->descricao = $request->descricao;
+        $Model->unidade_medida = $request->unidade_medida;
+        $Model->numero_registro_cas = $request->numero_registro_cas;
+        $Model->limite_conama = $request->limite_conama;
+        $Model->limite_oms = $request->limite_oms;
+
+        $Model->save();
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Parametro  $parametro
+     * @param  \App\Models\Alteracao  $alteracao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Parametro $parametro)
+    public function destroy($id)
     {
-        //
+        $objeto=Model::find($id);
+
+        if (is_null($objeto)){
+           echo "Código Invalido";
+           return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
+        }
+
+        Model::find($id)->delete();
+
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
 }
