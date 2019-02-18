@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateObjetivo extends Migration
+class CreateAlteracao extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateObjetivo extends Migration
      */
     public function up()
     {
-        Schema::create('objetivo', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('alteracao', function (Blueprint $table) {
+            $table->increments('id_alteracao');
+            $table->string('descricao',45);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateObjetivo extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('objetivo');
+        Schema::dropIfExists('alteracao');
     }
 }
