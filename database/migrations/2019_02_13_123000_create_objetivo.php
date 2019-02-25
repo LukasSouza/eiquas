@@ -14,7 +14,7 @@ class CreateObjetivo extends Migration
     public function up()
     {
         Schema::create('objetivo', function (Blueprint $table) {
-            $table->increments('id_objetivo');
+            $table->increments('id');
             $table->string('descricao',45);
             $table->timestamps();
         });

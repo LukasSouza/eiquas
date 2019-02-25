@@ -14,7 +14,7 @@ class CreateAlteracao extends Migration
     public function up()
     {
         Schema::create('alteracao', function (Blueprint $table) {
-            $table->increments('id_alteracao');
+            $table->increments('id');
             $table->string('descricao',45);
             $table->timestamps();
         });

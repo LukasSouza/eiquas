@@ -19,8 +19,8 @@ class CreateCategoriaParametro extends Migration
             $table->decimal('concentracao_superior',12,2);
 
             $table->primary(['fk_categoria', 'fk_parametro']);
-            $table->foreign('fk_categoria')->references('id_categoria')->on('categoria');
-            $table->foreign('fk_parametro')->references('id_parametro')->on('parametro');
+            $table->foreign('fk_categoria')->references('id')->on('categoria');
+            $table->foreign('fk_parametro')->references('id')->on('parametro');
             $table->timestamps();
         });
     }

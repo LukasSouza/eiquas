@@ -17,10 +17,10 @@ class CreateAmostraAlteracao extends Migration
             $table->integer('fk_amostra')->unsigned();
             $table->integer('fk_alteracao')->unsigned();
             $table->integer('nt_alteracao');
-            
+
             $table->primary(['fk_amostra', 'fk_alteracao']);
-            $table->foreign('fk_amostra')->references('id_amostra')->on('amostra');
-            $table->foreign('fk_alteracao')->references('id_alteracao')->on('alteracao');
+            $table->foreign('fk_amostra')->references('id')->on('amostra');
+            $table->foreign('fk_alteracao')->references('id')->on('alteracao');
             $table->timestamps();
         });
     }

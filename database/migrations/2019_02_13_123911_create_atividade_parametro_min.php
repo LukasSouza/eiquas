@@ -18,8 +18,8 @@ class CreateAtividadeParametroMin extends Migration
             $table->integer('fk_parametro')->unsigned();
 
             $table->primary(['fk_atividade', 'fk_parametro']);
-            $table->foreign('fk_atividade')->references('id_atividade')->on('atividade_preponderante');
-            $table->foreign('fk_parametro')->references('id_parametro')->on('parametro');
+            $table->foreign('fk_atividade')->references('id')->on('atividade_preponderante');
+            $table->foreign('fk_parametro')->references('id')->on('parametro');
             $table->timestamps();
         });
     }

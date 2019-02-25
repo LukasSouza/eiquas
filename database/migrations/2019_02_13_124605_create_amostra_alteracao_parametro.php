@@ -20,7 +20,7 @@ class CreateAmostraAlteracaoParametro extends Migration
 
             $table->primary(['fk_amostra', 'fk_alteracao', 'fk_parametro'], 'amostra_alteracao_parametro_primary');
             $table->foreign(['fk_amostra', 'fk_alteracao'], 'fk_amostra_alteracao_foreign')->references(['fk_amostra', 'fk_alteracao'])->on('amostraalteracao');
-            $table->foreign('fk_parametro', 'fk_amostra_alteracao_parametro_foreign')->references('id_parametro')->on('parametro');
+            $table->foreign('fk_parametro', 'fk_amostra_alteracao_parametro_foreign')->references('id')->on('parametro');
             $table->timestamps();
         });
     }

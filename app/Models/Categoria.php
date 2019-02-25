@@ -17,6 +17,6 @@ class Categoria extends Model
 
     public function CategoriaParametro()
     {
-        return $this->belongsTo('App\Models\CategoriaParametro', 'fk_categoria', 'id_categoria');
+        return $this->belongsTo('App\Models\CategoriaParametro', 'fk_categoria', 'id');
     }
 }

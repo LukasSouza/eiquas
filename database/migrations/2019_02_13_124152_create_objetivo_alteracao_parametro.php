@@ -19,9 +19,9 @@ class CreateObjetivoAlteracaoParametro extends Migration
             $table->integer('fk_parametro')->unsigned();
 
             $table->primary(['fk_objetivo', 'fk_alteracao', 'fk_parametro'], 'objetivo_alteracao_parametro_primary');
-            $table->foreign('fk_objetivo', 'fk_objetivo_foreign')->references('id_objetivo')->on('objetivo');
-            $table->foreign('fk_alteracao', 'fk_alteracao_foreign')->references('id_alteracao')->on('alteracao');
-            $table->foreign('fk_parametro', 'fk_parametro_foreign')->references('id_parametro')->on('parametro');
+            $table->foreign('fk_objetivo', 'fk_objetivo_foreign')->references('id')->on('objetivo');
+            $table->foreign('fk_alteracao', 'fk_alteracao_foreign')->references('id')->on('alteracao');
+            $table->foreign('fk_parametro', 'fk_parametro_foreign')->references('id')->on('parametro');
             $table->timestamps();
         });
     }

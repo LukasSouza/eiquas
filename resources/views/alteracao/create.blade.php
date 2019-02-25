@@ -10,7 +10,7 @@
 
                 <div class="card-body">
                     @if(isset($objeto))
-                        <form method="POST" action="{{ route('alteracao.update', $objeto->id_alteracao) }}">
+                        <form method="POST" action="{{ route('alteracao.update', $objeto->id) }}">
                             {{ method_field('PATCH') }}
                     @else
                         <form method="POST" action="{{ route('alteracao.store') }}">
@@ -34,7 +34,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Descrição') }}</label>
 
                             <div class="col-md-6">
-                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@isset($objeto) {{ $objeto->descricao or "" }} @endisset" required autofocus>
+                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@if(isset($objeto)) {{ $objeto->descricao}} @endif" required autofocus>
 
                                 @if ($errors->has('descricao'))
                                     <span class="invalid-feedback">

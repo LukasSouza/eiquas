@@ -18,7 +18,7 @@ class Parametro extends Model
 
     public function ObjetivoAlteracaoParametro()
     {
-        return $this->belongsTo('App\Models\ObjetivoAlteracaoParametro', 'fk_parametro', 'id_parametro');
+        return $this->belongsTo('App\Models\ObjetivoAlteracaoParametro', 'fk_parametro', 'id');
     }
 
     public function AmostraAlteracaoParametro()

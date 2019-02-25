@@ -14,7 +14,7 @@ class CreateAmostra extends Migration
     public function up()
     {
         Schema::create('amostra', function (Blueprint $table) {
-            $table->increments('id_amostra');
+            $table->increments('id');
             $table->integer('id_atividade_preponderante');
             $table->string('descricao',45);
             $table->string('ponto_coleta',45);

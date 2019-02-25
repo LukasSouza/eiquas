@@ -14,7 +14,7 @@ class CreateParametro extends Migration
     public function up()
     {
         Schema::create('parametro', function (Blueprint $table) {
-            $table->increments('id_parametro');
+            $table->increments('id');
             $table->string('descricao',45);
             $table->string('unidade_medida',10);
             $table->string('numero_registro_cas',15); //Chemical Abstracts Service (CAS)
