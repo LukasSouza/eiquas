@@ -16,7 +16,7 @@ class CreateAmostraAlteracao extends Migration
         Schema::create('amostraalteracao', function (Blueprint $table) {
             $table->integer('fk_amostra')->unsigned();
             $table->integer('fk_alteracao')->unsigned();
-            $table->integer('nt_alteracao');
+            $table->integer('nota_alteracao');
 
             $table->primary(['fk_amostra', 'fk_alteracao']);
             $table->foreign('fk_amostra')->references('id')->on('amostra');

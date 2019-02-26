@@ -19,6 +19,11 @@
     <link href="{{ asset('css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
+<style media="screen">
+    #wrapper{
+        margin-top: 53px;
+    }
+</style>
 
 <body id="test2">
     <div id="app">

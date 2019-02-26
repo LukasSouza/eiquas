@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    <h2>Alterações</h2>
+    <h2>Atividade Preponderante</h2>
     <p class="separator"></p>
     <div class="table-responsive">
         <table class="table table-striped table-bordered" id="dataTable" aria-describedby="users_table" role="grid">
@@ -25,13 +25,13 @@
         				<td>{{$obj->descricao}}</td>
         				<td class="d-flex justify-content-center">
 
-                            <form action="{{ route('alteracao.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
+                            <form action="{{ route('atividade_preponderante.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
                						<i class="glyphicon glyphicon-pencil"></i> Editar
                				    </button>
                             </form>
 
-                            <form action="{{ route('alteracao.destroy', $obj->id) }}" method="POST">
+                            <form action="{{ route('atividade_preponderante.destroy', $obj->id) }}" method="POST">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente Excluir?')">
@@ -49,7 +49,7 @@
     </div>
     {{-- {{ $models->links() }} --}}
     <br>
-    <a class="btn btn-primary" href="{{ route('alteracao.create') }}">{{ __('Nova Alteração') }}</a>
+    <a class="btn btn-primary" href="{{ route('atividade_preponderante.create') }}">{{ __('Nova Atividade Preponderante') }}</a>
 
 @endsection
 

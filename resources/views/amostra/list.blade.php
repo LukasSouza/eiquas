@@ -8,7 +8,7 @@
         </div>
     @endif
 
-    <h2>Alterações</h2>
+    <h2>Amostras</h2>
     <p class="separator"></p>
     <div class="table-responsive">
         <table class="table table-striped table-bordered" id="dataTable" aria-describedby="users_table" role="grid">
