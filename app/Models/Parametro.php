@@ -18,21 +18,21 @@ class Parametro extends Model
 
     public function ObjetivoAlteracaoParametro()
     {
-        return $this->belongsTo('App\Models\ObjetivoAlteracaoParametro', 'fk_parametro', 'id');
+        return $this->belongsTo('App\Models\ObjetivoAlteracaoParametro', 'id', 'fk_parametro');
     }
 
     public function AmostraAlteracaoParametro()
     {
-        return $this->belongsTo('App\Models\AmostraAlteracaoParametro', 'fk_parametro', 'id_parametro');
+        return $this->belongsTo('App\Models\AmostraAlteracaoParametro', 'id', 'fk_parametro');
     }
 
     public function CategoriaParametro()
     {
-        return $this->belongsTo('App\Models\CategoriaParametro', 'fk_parametro', 'id_parametro');
+        return $this->hasMany('App\Models\CategoriaParametro', 'fk_parametro', 'id');
     }
 
     public function AtividadeParametroMin()
     {
-        return $this->belongsTo('App\Models\AtividadeParametroMin', 'fk_parametro', 'id_parametro');
+        return $this->belongsTo('App\Models\AtividadeParametroMin', 'id', 'fk_parametro');
     }
 }
