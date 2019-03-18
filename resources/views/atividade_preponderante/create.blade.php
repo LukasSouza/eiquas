@@ -44,6 +44,30 @@
                             </div>
                         </div>
 
+                        <div class="card">
+                            <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
+                                <div class="card-body">
+                                   
+                                    <div class="form-group row content-param" id="content-param">
+                                        <label for="parametros" class="col-md-4 col-form-label text-md-right">Parametro</label>
+                                        
+                                        <div class="col-md-6">
+                                            <input id="parametros" type="text" class="form-control" name="parametros[]" value="" maxlength="45" required autofocus>
+
+                                            @if ($errors->has('parametros'))
+                                                <span class="invalid-feedback">
+                                                    <strong>{{ $errors->first('parametros') }}</strong>
+                                                </span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                     
+                                    <button class="btn btn-primary circular" id="mais">+</button>
+                                    <button class="btn btn-danger circular" id="menos">-</button>
+                                </div>
+                            </div>
+                        </div> 
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -61,8 +85,29 @@
 </div>
 @endsection
 
-<style type="text/css">
-    .card {
-        background-color: white;
-    }
-</style>
+@section('pagestyle')
+    <style type="text/css">
+        .card {
+            background-color: white;
+        }
+        button.circular{
+            border-radius: 50%;
+        }
+    </style>
+@endsection
+
+@section('pagescript')
+    <script>
+        $(document).ready(function(){
+
+            $('#mais').on('click',function(e){
+                e.preventDefault;
+               
+                existingdiv1 = $( "#content-param" );
+                alert(existingdiv1);
+                $('.content-param').last().after(existingdiv1);
+            });
+
+        });
+    </script>
+@endsection

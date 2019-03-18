@@ -27,7 +27,7 @@
         margin-right: 25px;
     }
 </style>
-
+@yield('pagestyle')
 <body id="test2">
     <div id="app">
         <nav class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 navbar navbar-expand-md navbar-light navbar-laravel fixed-top" >

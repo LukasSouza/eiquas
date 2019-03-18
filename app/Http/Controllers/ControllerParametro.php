@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Parametro as Model;
 use App\Models\ObjetivoAlteracaoParametro as ObjetivoAlteracaoParametro;
 use App\Models\CategoriaParametro as CategoriaParametro;
+use App\Models\AmostraAlteracaoParametro as AmostraAlteracaoParametro;
 
 class ControllerParametro extends Controller
 {
@@ -105,29 +106,19 @@ class ControllerParametro extends Controller
         $Model->numero_registro_cas = $request->numero_registro_cas;
         $Model->limite_conama = $request->limite_conama;
         $Model->limite_oms = $request->limite_oms;
-
         $Model->save();
 
-        $ObjetivoAlteracaoParametro = ObjetivoAlteracaoParametro::where('fk_parametro', $id)
-                            ->where('fk_objetivo','1')
-                            ->first();
-        $ObjetivoAlteracaoParametro->fk_alteracao = $request->alteracao;
+        $ObjetivoAlteracaoParametro = ObjetivoAlteracaoParametro::where('fk_parametro', $id)->where('fk_objetivo','1')->first();
+        $ObjetivoAlteracaoParametro->fk_alteracao = (int)$request->alteracao;
         $ObjetivoAlteracaoParametro->save();
 
-
         foreach ($request->concentracao_superior as $key => $concentracao_superior) {
-            $chave = $key+1;
-            $CategoriaParametro = CategoriaParametro::where('fk_parametro', $id)
-                                ->where('fk_categoria', $chave)
-                                ->first();
-
+            $CategoriaParametro = CategoriaParametro::where('fk_parametro', $id)->where('fk_categoria', $key+1)->first();
             $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
-            //dd($CategoriaParametro);
             $CategoriaParametro->save();
-            //$Model->CategoriaParametro()->save($CategoriaParametro);
         }
 
-    //    return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
     }
 
     /**
@@ -141,11 +132,14 @@ class ControllerParametro extends Controller
         $objeto=Model::find($id);
 
         if (is_null($objeto)){
-           echo "Código Invalido";
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
 
-        Model::find($id)->delete();
+        $objeto->ObjetivoAlteracaoParametro()->delete();
+        $objeto->AmostraAlteracaoParametro()->delete();
+        $objeto->CategoriaParametro()->delete();
+        $objeto->AtividadeParametroMin()->delete();
+        $objeto->delete();
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }

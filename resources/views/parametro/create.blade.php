@@ -14,12 +14,14 @@
                 <div class="card-body">
                     @if(isset($objeto))
                         <form method="POST" action="{{ route('parametro.update', $objeto->id) }}">
-                            {{ method_field('PATCH') }}
+                            {{ method_field('PUT') }}
                             @php
                                 $alteracao = $objeto->ObjetivoAlteracaoParametro()->first()->Alteracao()->first();
                                 $categoria_parametro = DB::table('categoria_parametro')->get()->where('fk_parametro',$objeto->id);
-                                //$categoria_parametro = (array)$objeto->CategoriaParametro()->first();
-                                //dd($categoria_parametro);
+                                
+                            //    $categoria_parametro = (array)$objeto->CategoriaParametro()->first();
+                                //$categoria_parametro = array_values($categoria_parametro);
+                               // dd($categoria_parametro);
                             @endphp
                     @else
                         <form method="POST" action="{{ route('parametro.store') }}">
@@ -37,7 +39,7 @@
                                 </ul>
                             </div>
                         @endif
-
+                        
                         {{-- NOME --}}
                         <div class="form-group row">
                             <label for="nome" class="col-md-4 col-form-label text-md-right">{{ __('Nome') }}</label>
@@ -52,7 +54,7 @@
                                 @endif
                             </div>
                         </div>
-
+                        
                         {{-- ALTERACAO --}}
                         <div class="form-group row">
                             <label for="alteracao" class="col-md-4 col-form-label text-md-right">{{ __('Alteração') }}</label>
@@ -81,7 +83,7 @@
                                 @endif
                             </div>
                         </div>
-
+                
                         {{-- NUMERO REGISTRO CAS --}}
                         <div class="form-group row">
                             <label for="numero_registro_cas" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Registro CAS') }}</label>
@@ -111,7 +113,7 @@
                                 @endif
                             </div>
                         </div>
-
+                       
                         {{-- LIMITE OMS --}}
                         <div class="form-group row">
                             <label for="limite_oms" class="col-md-4 col-form-label text-md-right">{{ __('Limite OMS') }}</label>
@@ -126,15 +128,16 @@
                                 @endif
                             </div>
                         </div>
+                     
                         <div class="card">
                             <div class="card-header">{{ __('Categorias - Concentração Superior') }}</div>
                                 <div class="card-body">
                                     @foreach ($lista_categoria as $chave => $categoria)
                                         <div class="form-group row">
                                             <label for="concentracao_superior" class="col-md-4 col-form-label text-md-right">{{ $categoria->qualidade }} ({{$categoria->nota}})</label>
-
+                                           
                                             <div class="col-md-6">
-                                                <input id="concentracao_superior{{$chave}}" type="text" class="form-control" name="concentracao_superior[]" value="@if(isset($categoria_parametro)) {{ $categoria_parametro[$chave]->concentracao_superior}} @endif" maxlength="45" required autofocus>
+                                                <input id="concentracao_superior{{$chave}}" type="text" class="form-control" name="concentracao_superior[]" value="@if(isset($categoria_parametro)) {{ $categoria_parametro[$chave*2]->concentracao_superior}} @endif" maxlength="45" required autofocus>
 
                                                 @if ($errors->has('concentracao_superior'))
                                                     <span class="invalid-feedback">
@@ -143,11 +146,12 @@
                                                 @endif
                                             </div>
                                         </div>
+                                     
                                     @endforeach
                                 </div>
                             </div>
-                        </div>
-
+                        </div> 
+                       
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
