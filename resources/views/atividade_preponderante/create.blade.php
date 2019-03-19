@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@php
+    $parametros = DB::table('parametro')->get();
+@endphp
 @section('content')
 
 <div class="container">
@@ -47,23 +49,29 @@
                         <div class="card">
                             <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
                                 <div class="card-body">
-                                   
-                                    <div class="form-group row content-param" id="content-param">
-                                        <label for="parametros" class="col-md-4 col-form-label text-md-right">Parametro</label>
-                                        
-                                        <div class="col-md-6">
-                                            <input id="parametros" type="text" class="form-control" name="parametros[]" value="" maxlength="45" required autofocus>
+                                        <button type="button" class="btn btn-primary circular" id="mais">+</button>
+                                        <button type="button" class="btn btn-danger circular" id="menos">-</button>
+                                    <div class="form-group row content-param" id="body-param">
+                                        <div id="content-param">
+                                            <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
+                                            
+                                            <div class="col-md-6">
+                                                <select class="form-control parametros" name="parametros[]" required >
+                                                    <option id="selected" value="" selected="selected" >Selecione...</option>
+                                                    @foreach ($parametros as $parametro)
+                                                        <option value="{{$parametro->id}}" @if(isset($objeto) && $objeto->AtividadeParametroMinimo()->fk_parametro == $parametro->id) {{ __("selected='selected'") }} @endif > {{$parametro->descricao}} </option>
+                                                    @endforeach
+                                                </select>
 
-                                            @if ($errors->has('parametros'))
-                                                <span class="invalid-feedback">
-                                                    <strong>{{ $errors->first('parametros') }}</strong>
-                                                </span>
-                                            @endif
+                                                @if ($errors->has('parametros'))
+                                                    <span class="invalid-feedback">
+                                                        <strong>{{ $errors->first('parametros') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                     
-                                    <button class="btn btn-primary circular" id="mais">+</button>
-                                    <button class="btn btn-danger circular" id="menos">-</button>
+                                    
                                 </div>
                             </div>
                         </div> 
@@ -83,6 +91,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @section('pagestyle')
@@ -93,21 +102,77 @@
         button.circular{
             border-radius: 50%;
         }
+        #content-param div{
+            display: inline-block;
+        }
+        #content-param{
+            width: 100%;
+        }
+        #selected{
+            display: block !important;
+        }
+        
     </style>
 @endsection
 
 @section('pagescript')
     <script>
         $(document).ready(function(){
+            var existingdiv1 = $( "#body-param" ).html();
+            var contador = 1;
+            var total = {{sizeof($parametros)}};
+            var parametros = '{{$parametros}}';
+           
 
             $('#mais').on('click',function(e){
-                e.preventDefault;
-               
-                existingdiv1 = $( "#content-param" );
-                alert(existingdiv1);
-                $('.content-param').last().after(existingdiv1);
+                if(contador < total){ 
+                    $('#body-param').last().append(existingdiv1);
+                    contador++;
+                    $('#label-param').last().html('Parâmetro '+contador);
+                    ocultarOpcaoSelecionada('.parametros');
+                }
+                else
+                    alert('Numero máximo de Parâmetros')
             });
 
+            $('#menos').on('click',function(e){
+                if(contador > 1){
+                    $('#content-param:last-child').remove();
+                    contador--;
+                    $('#label-param').html('Parâmetro '+contador);
+                    ocultarOpcaoSelecionada('.parametros');
+                }
+                else
+                    alert('Mínimo de um parâmetro obrigatorio para o cadastro!')
+            });
+
+            $('.parametros').each(function(){
+                $(document).on('change', '.parametros', function(){
+                    ocultarOpcaoSelecionada('.parametros');
+                });
+            });
+
+            const ocultarOpcaoSelecionada = function(selector) {
+                var array = JSON.parse( parametros.replace(/&quot;/g, '"') ); //Transformar em Array e retirar marcações $quot;
+                array = $.map(array, function(val){return String(val.id);}); //Pegar apenas o ID do objeto
+                array = array.filter( (value) => { return !retornaValoresSelecionados(selector).includes(value); } );
+                // console.log(array);
+                $(selector +' option').each(function(){
+                    if( !array.includes( $(this).val() ) )
+                        $(this).css('display', 'none');
+                    else
+                        $(this).css('display', 'block');
+                });
+            }
+
+            const retornaValoresSelecionados = function(selector) {
+                let array = new Array;
+                $(selector).each(function (indexInArray, valueOfElement) { 
+                    array.push( $(valueOfElement).val() );
+                });
+                return array;
+            }
+            
         });
     </script>
 @endsection
