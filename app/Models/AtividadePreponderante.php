@@ -12,8 +12,8 @@ class AtividadePreponderante extends Model
         'descricao'
     ];
 
-    public function AtividadeParametroMin()
+    public function AtividadeParametroMinimo()
     {
-        return $this->belongsTo('App\Models\AtividadeParametroMin', 'fk_atividade', 'id_atividade');
+        return $this->hasMany('App\Models\AtividadeParametroMin', 'fk_atividade', 'id');
     }
 }

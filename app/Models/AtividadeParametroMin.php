@@ -16,7 +16,7 @@ class AtividadeParametroMin extends Model
         return $this->belongsTo('App\Models\Parametro', 'fk_parametro', 'id');
     }
 
-    public function Atividade()
+    public function AtividadePreponderante()
     {
         return $this->belongsTo('App\Models\AtividadePreponderante', 'fk_atividade', 'id');
     }

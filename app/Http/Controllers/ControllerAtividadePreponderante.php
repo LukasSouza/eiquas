@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\AtividadePreponderante;
 use Illuminate\Http\Request;
 use App\Models\AtividadePreponderante as Model;
+use App\Models\AtividadeParametroMin as AtividadeParametroMin;
+
 class ControllerAtividadePreponderante extends Controller
 {
     var $rota_list = 'atividade_preponderante';
@@ -39,8 +41,15 @@ class ControllerAtividadePreponderante extends Controller
     {
         $Model = new Model;
         $Model->descricao = $request->descricao;
-
         $Model->save();
+
+        foreach($request->parametros as $parametro):
+            $atividadeParametroMin = new AtividadeParametroMin;
+            $atividadeParametroMin->fk_parametro = $parametro;
+            $atividadeParametroMin->fk_atividade = $Model->id;
+            $atividadeParametroMin->save();
+        endforeach;
+
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
     }
 
@@ -76,10 +85,19 @@ class ControllerAtividadePreponderante extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->flashOnly('parametros');
         $Model = Model::find($id);
         $Model->descricao = $request->descricao;
-
         $Model->save();
+        dd($request);
+        $i = 0;
+        foreach($request->parametros as $parametro):
+            $atividadeParametroMin = AtividadeParametroMin::where('fk_parametro', $request->parametros_old[$i])->where('fk_atividade', $Model->id)->first();
+            $atividadeParametroMin->fk_parametro = $parametro;
+            $atividadeParametroMin->fk_atividade = $Model->id;
+            $atividadeParametroMin->save();
+        endforeach;
+
         return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
     }
 
@@ -98,7 +116,8 @@ class ControllerAtividadePreponderante extends Controller
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
 
-        Model::find($id)->delete();
+        $objeto->AtividadeParametroMinimo()->delete();
+        $objeto->delete();
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }

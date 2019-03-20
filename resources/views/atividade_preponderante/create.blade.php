@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @php
     $parametros = DB::table('parametro')->get();
+
+    //dd($objeto->AtividadeParametroMinimo[0]);
+                 
 @endphp
 @section('content')
 
@@ -16,16 +19,18 @@
                             {{ method_field('PATCH') }}
                     @else
                         <form method="POST" action="{{ route('atividade_preponderante.store') }}">
+                         
                     @endif
 
                         @csrf
+                        <input type="hidden" id="total_parametros" value="@if(isset($objeto)){{sizeof($objeto->AtividadeParametroMinimo)}}@else{{__('0')}}@endif">
 
                         {{-- ERROS --}}
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
-                                     <li>   {{ $error }}</li>
+                                     <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -56,10 +61,14 @@
                                             <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
                                             
                                             <div class="col-md-6">
+                                                @foreach ($parametros as $parametro)
+                                                    <input type="hidden" name="parametros_old[]" value="{{$parametro->id}}">
+                                                @endforeach
                                                 <select class="form-control parametros" name="parametros[]" required >
                                                     <option id="selected" value="" selected="selected" >Selecione...</option>
+                                                
                                                     @foreach ($parametros as $parametro)
-                                                        <option value="{{$parametro->id}}" @if(isset($objeto) && $objeto->AtividadeParametroMinimo()->fk_parametro == $parametro->id) {{ __("selected='selected'") }} @endif > {{$parametro->descricao}} </option>
+                                                        <option value="{{$parametro->id}}" > {{$parametro->descricao}} </option>
                                                     @endforeach
                                                 </select>
 
@@ -122,29 +131,30 @@
             var contador = 1;
             var total = {{sizeof($parametros)}};
             var parametros = '{{$parametros}}';
-           
 
-            $('#mais').on('click',function(e){
-                if(contador < total){ 
-                    $('#body-param').last().append(existingdiv1);
-                    contador++;
-                    $('#label-param').last().html('Parâmetro '+contador);
-                    ocultarOpcaoSelecionada('.parametros');
+            var total_parametros = $("#total_parametros").val();
+            
+            //Tela UPDATE
+            if(total_parametros > 0){
+                var AtividadeParametroMinimo;
+                @if(isset($objeto))
+                    AtividadeParametroMinimo = phpToJs("{{$objeto->AtividadeParametroMinimo}}");
+                @endif
+                
+                for(i = 1; i < total_parametros; i++){
+                    botao_mais();
                 }
-                else
-                    alert('Numero máximo de Parâmetros')
-            });
+                var count = 0;
+                $('.parametros').each(function(){
+                    $(this).val(AtividadeParametroMinimo[count].fk_parametro);
+                    count++;
+                    ocultarOpcaoSelecionada('.parametros');
+                });
+                
+            }
 
-            $('#menos').on('click',function(e){
-                if(contador > 1){
-                    $('#content-param:last-child').remove();
-                    contador--;
-                    $('#label-param').html('Parâmetro '+contador);
-                    ocultarOpcaoSelecionada('.parametros');
-                }
-                else
-                    alert('Mínimo de um parâmetro obrigatorio para o cadastro!')
-            });
+            document.getElementById("mais").addEventListener ("click", botao_mais, false);
+            document.getElementById("menos").addEventListener ("click", botao_menos, false); 
 
             $('.parametros').each(function(){
                 $(document).on('change', '.parametros', function(){
@@ -152,8 +162,29 @@
                 });
             });
 
-            const ocultarOpcaoSelecionada = function(selector) {
-                var array = JSON.parse( parametros.replace(/&quot;/g, '"') ); //Transformar em Array e retirar marcações $quot;
+            function botao_mais(){
+                if(contador < total){ 
+                    $('#body-param').last().append(existingdiv1);
+                    contador++;
+                    $('#label-param').last().html('Parâmetro '+contador);
+                    ocultarOpcaoSelecionada('.parametros');
+                }
+                else
+                    alert('Numero máximo de Parâmetros');
+            }
+            function botao_menos(){
+                if(contador > 1){
+                    $('#content-param:last-child').remove();
+                    contador--;
+                    $('#label-param').html('Parâmetro '+contador);
+                    ocultarOpcaoSelecionada('.parametros');
+                }
+                else
+                    alert('Mínimo de um parâmetro obrigatorio para o cadastro!');
+            }
+
+            function ocultarOpcaoSelecionada(selector) {
+                var array = phpToJs(parametros); //Transformar em Array e retirar marcações $quot;
                 array = $.map(array, function(val){return String(val.id);}); //Pegar apenas o ID do objeto
                 array = array.filter( (value) => { return !retornaValoresSelecionados(selector).includes(value); } );
                 // console.log(array);
@@ -165,13 +196,18 @@
                 });
             }
 
-            const retornaValoresSelecionados = function(selector) {
+            function retornaValoresSelecionados(selector) {
                 let array = new Array;
                 $(selector).each(function (indexInArray, valueOfElement) { 
                     array.push( $(valueOfElement).val() );
                 });
                 return array;
             }
+
+            function phpToJs(phpArray) {
+                return JSON.parse( phpArray.replace(/&quot;/g, '"') );
+            }
+            
             
         });
     </script>
