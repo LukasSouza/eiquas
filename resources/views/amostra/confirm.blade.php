@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @php
     $objetivos = DB::table('objetivo')->get();
-    $parametros = DB::table('parametro')->get();
     $atividades_preponderantes = DB::table('atividade_preponderante')->get();
 @endphp
 @section('content')
@@ -147,49 +146,6 @@
                             </div>
                         </div>
 
-                         {{-- PARAMETROS --}}
-                        <div class="card">
-                                <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
-                                    <div class="card-body">
-                                            <button type="button" class="btn btn-primary circular" id="mais">+</button>
-                                            <button type="button" class="btn btn-danger circular" id="menos">-</button>
-                                        <div class="form-group row content-param" id="body-param">
-                                            <div id="content-param">
-                                                <label for="parametros" id='label-param' class="col-md-2 col-form-label text-md-right">Parametro</label>
-                                                
-                                                <div class="col-md-4">
-                                                    <select class="form-control parametros" name="parametros[]" required >
-                                                        <option id="selected" value="" selected="selected" >Selecione...</option>
-                                                    
-                                                        @foreach ($parametros as $parametro)
-                                                            <option value="{{$parametro->id}}" > {{$parametro->descricao}} </option>
-                                                        @endforeach
-                                                    </select>
-    
-                                                    @if ($errors->has('parametros'))
-                                                        <span class="invalid-feedback">
-                                                            <strong>{{ $errors->first('parametros') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-
-                                                <label for="concentracao" id='label-param' class="col-md-2 col-form-label text-md-right">Concentração</label>
-                                                
-                                                <div class="col-md-3">
-                                                    <input type="text" class="form-control{{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)) {{ $objeto->numero_amostra }} @endif" required autofocus maxlength="45">
-    
-                                                    @if ($errors->has('concentracao'))
-                                                        <span class="invalid-feedback">
-                                                            <strong>{{ $errors->first('concentracao') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                </div>
-                            </div> 
 
 
                         <div class="form-group row mb-0">
@@ -209,112 +165,8 @@
 </div>
 @endsection
 
-@section('pagestyle')
-    <style type="text/css">
-        .card {
-            background-color: white;
-        }
-        button.circular{
-            border-radius: 50%;
-        }
-        #content-param div{
-            display: inline-block;
-        }
-        #content-param{
-            width: 100%;
-        }
-        #selected{
-            display: block !important;
-        }
-    </style>
-@endsection
-
-
-@section('pagescript')
-    <script>
-        $(document).ready(function(){
-            var existingdiv1 = $( "#body-param" ).html();
-            var contador = 1;
-            var total = {{sizeof($parametros)}};
-            var parametros = '{{$parametros}}';
-
-            var total_parametros = $("#total_parametros").val();
-            
-            //Tela UPDATE
-            if(total_parametros > 0){
-                var AtividadeParametroMinimo;
-                @if(isset($objeto))
-                    AtividadeParametroMinimo = phpToJs("{{$objeto->AtividadeParametroMinimo}}");
-                @endif
-                
-                for(i = 1; i < total_parametros; i++){
-                    botao_mais();
-                }
-                var count = 0;
-                $('.parametros').each(function(){
-                    $(this).val(AtividadeParametroMinimo[count].fk_parametro);
-                    count++;
-                    ocultarOpcaoSelecionada('.parametros');
-                });
-                
-            }
-
-            document.getElementById("mais").addEventListener ("click", botao_mais, false);
-            document.getElementById("menos").addEventListener ("click", botao_menos, false); 
-
-            $('.parametros').each(function(){
-                $(document).on('change', '.parametros', function(){
-                    ocultarOpcaoSelecionada('.parametros');
-                });
-            });
-
-            function botao_mais(){
-                if(contador < total){ 
-                    $('#body-param').last().append(existingdiv1);
-                    contador++;
-                    $('#label-param').last().html('Parâmetro '+contador);
-                    ocultarOpcaoSelecionada('.parametros');
-                }
-                else
-                    alert('Numero máximo de Parâmetros');
-            }
-            function botao_menos(){
-                if(contador > 1){
-                    $('#content-param:last-child').remove();
-                    contador--;
-                    $('#label-param').html('Parâmetro '+contador);
-                    ocultarOpcaoSelecionada('.parametros');
-                }
-                else
-                    alert('Mínimo de um parâmetro obrigatorio para o cadastro!');
-            }
-
-            function ocultarOpcaoSelecionada(selector) {
-                var array = phpToJs(parametros); //Transformar em Array e retirar marcações $quot;
-                array = $.map(array, function(val){return String(val.id);}); //Pegar apenas o ID do objeto
-                array = array.filter( (value) => { return !retornaValoresSelecionados(selector).includes(value); } );
-                // console.log(array);
-                $(selector +' option').each(function(){
-                    if( !array.includes( $(this).val() ) )
-                        $(this).css('display', 'none');
-                    else
-                        $(this).css('display', 'block');
-                });
-            }
-
-            function retornaValoresSelecionados(selector) {
-                let array = new Array;
-                $(selector).each(function (indexInArray, valueOfElement) { 
-                    array.push( $(valueOfElement).val() );
-                });
-                return array;
-            }
-
-            function phpToJs(phpArray) {
-                return JSON.parse( phpArray.replace(/&quot;/g, '"') );
-            }
-            
-            
-        });
-    </script>
-@endsection
+<style type="text/css">
+    .card {
+        background-color: white;
+    }
+</style>

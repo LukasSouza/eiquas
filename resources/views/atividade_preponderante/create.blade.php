@@ -1,9 +1,6 @@
 @extends('layouts.app')
 @php
     $parametros = DB::table('parametro')->get();
-
-    //dd($objeto->AtividadeParametroMinimo[0]);
-                 
 @endphp
 @section('content')
 
@@ -51,6 +48,7 @@
                             </div>
                         </div>
 
+                        {{-- PARAMETROS --}}
                         <div class="card">
                             <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
                                 <div class="card-body">
@@ -61,9 +59,6 @@
                                             <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
                                             
                                             <div class="col-md-6">
-                                                @foreach ($parametros as $parametro)
-                                                    <input type="hidden" name="parametros_old[]" value="{{$parametro->id}}">
-                                                @endforeach
                                                 <select class="form-control parametros" name="parametros[]" required >
                                                     <option id="selected" value="" selected="selected" >Selecione...</option>
                                                 

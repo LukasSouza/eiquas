@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('alteracao', 'ControllerAlteracao');
-Route::resource('amostra', 'ControllerAmostra');
-Route::resource('atividade_preponderante', 'ControllerAtividadePreponderante');
-Route::resource('categoria', 'ControllerCategoria');
 Route::resource('objetivo', 'ControllerObjetivo');
+Route::resource('alteracao', 'ControllerAlteracao');
+Route::resource('categoria', 'ControllerCategoria');
 Route::resource('parametro', 'ControllerParametro');
+Route::resource('atividade_preponderante', 'ControllerAtividadePreponderante');
+Route::resource('amostra', 'ControllerAmostra');
+Route::post('amostra/confirm', 'ControllerAmostra@confirm')->name('amostra.confirm');

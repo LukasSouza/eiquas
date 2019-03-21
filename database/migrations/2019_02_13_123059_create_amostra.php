@@ -21,7 +21,7 @@ class CreateAmostra extends Migration
             $table->date('data_coleta');
             $table->string('condicao_tempo',45);
             $table->string('numero_amostra',45);
-            $table->integer('eiquas');
+            $table->integer('eiquas')->nullable();
             $table->timestamps();
         });
     }

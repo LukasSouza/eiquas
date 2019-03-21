@@ -89,10 +89,10 @@ class ControllerAtividadePreponderante extends Controller
         $Model = Model::find($id);
         $Model->descricao = $request->descricao;
         $Model->save();
-        dd($request);
-        $i = 0;
+        $Model->AtividadeParametroMinimo()->delete();
+
         foreach($request->parametros as $parametro):
-            $atividadeParametroMin = AtividadeParametroMin::where('fk_parametro', $request->parametros_old[$i])->where('fk_atividade', $Model->id)->first();
+            $atividadeParametroMin = new AtividadeParametroMin;
             $atividadeParametroMin->fk_parametro = $parametro;
             $atividadeParametroMin->fk_atividade = $Model->id;
             $atividadeParametroMin->save();

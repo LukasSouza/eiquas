@@ -16,8 +16,4 @@ class Alteracao extends Model
     {
         return $this->belongsTo('App\Models\AmostraAlteracao', 'fk_alteracao', 'id');
     }
-    // public function ObjetivoAlteracaoParametro()
-    // {
-    //     return $this->belongsTo('App\Models\ObjetivoAlteracaoParametro', 'fk_alteracao', 'id_alteracao');
-    // }
 }

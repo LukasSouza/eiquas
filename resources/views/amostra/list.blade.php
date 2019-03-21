@@ -25,13 +25,13 @@
         				<td>{{$obj->descricao}}</td>
         				<td class="d-flex justify-content-center">
 
-                            <form action="{{ route('alteracao.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
+                            <form action="{{ route('amostra.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
                						<i class="glyphicon glyphicon-pencil"></i> Editar
                				    </button>
                             </form>
 
-                            <form action="{{ route('alteracao.destroy', $obj->id) }}" method="POST">
+                            <form action="{{ route('amostra.destroy', $obj->id) }}" method="POST">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente Excluir?')">
@@ -49,7 +49,7 @@
     </div>
     {{-- {{ $models->links() }} --}}
     <br>
-    <a class="btn btn-primary" href="{{ route('alteracao.create') }}">{{ __('Nova Alteração') }}</a>
+    <a class="btn btn-primary" href="{{ route('amostra.create') }}">{{ __('Nova Amostra') }}</a>
 
 @endsection
 

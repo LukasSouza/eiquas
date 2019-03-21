@@ -62,6 +62,17 @@ class ControllerAmostra extends Controller
     }
 
     /**
+     * Confirm the specified resource.
+     *
+     * @param  \App\Models\Alteracao  $alteracao
+     * @return \Illuminate\Http\Response
+     */
+    public function confirm(Request $request)
+    {
+        dd($request->all());
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Alteracao  $alteracao
