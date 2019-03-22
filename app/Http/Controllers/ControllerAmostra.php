@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Amostra;
 use Illuminate\Http\Request;
 use App\Models\Amostra as Model;
+use App\Models\AtividadeParametroMin as AtividadeParametroMin;
+use App\Models\Objetivo as Objetivo;
+use App\Models\AtividadePreponderante as AtividadePreponderante;
+use App\Models\Parametro as Parametro;
+use function Opis\Closure\unserialize;
 class ControllerAmostra extends Controller
 {
     var $rota_list = 'amostra';
@@ -37,14 +42,15 @@ class ControllerAmostra extends Controller
      */
     public function store(Request $request)
     {
+        $request = unserialize($request->array);
+        dd($request);
         $Model = new Model;
         $Model->descricao = $request->descricao;
-        $Model->id_atividade_preponderante = $request->id_atividade_preponderante;
+        $Model->id_atividade_preponderante = $request->atividade_preponderante;
         $Model->ponto_coleta = $request->ponto_coleta;
         $Model->data_coleta = $request->data_coleta;
-        $Model->cd_tempo = $request->cd_tempo;
+        $Model->condicao_tempo = $request->condicao_tempo;
         $Model->numero_amostra = $request->numero_amostra;
-        $Model->eiquas = $request->eiquas;
 
         $Model->save();
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
@@ -69,7 +75,30 @@ class ControllerAmostra extends Controller
      */
     public function confirm(Request $request)
     {
-        dd($request->all());
+        $parametros_obrigatorios_nao_escolhidos = [];
+        $objeto = $request->all();
+
+        $atividadeParametroMin = AtividadeParametroMin::where('fk_atividade',$request->atividade_preponderante)->get();
+
+        //Pegando descrição dos ID's
+        $objetivo = Objetivo::find($request->objetivo);
+        $objeto['objetivo_desc'] = $objetivo->descricao;
+
+        $atividadePreponderante = AtividadePreponderante::find($request->atividade_preponderante);
+        $objeto['atividade_preponderante_desc'] = $atividadePreponderante->descricao;
+
+        foreach($objeto['parametros'] as $key => $parametro_id){
+            $parametro = Parametro::find($parametro_id);
+            $objeto['parametros_desc'][$key] = $parametro->descricao." (".$parametro->unidade_medida.")";
+        }
+        //FIM
+
+        foreach($atividadeParametroMin as $parametro_obrigatorio){
+            if(!in_array($parametro_obrigatorio->fk_parametro, $request->parametros)){
+                $parametros_obrigatorios_nao_escolhidos[] = $parametro_obrigatorio->fk_parametro;
+            }
+        }
+        return view($this->rota_list.'.confirm', ['objeto' => $objeto, 'parametros_obrigatorios_nao_escolhidos' => $parametros_obrigatorios_nao_escolhidos] );
     }
 
     /**

@@ -7,27 +7,28 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8 py-5">
-            <div class="card">
-                <div class="card-header">{{ __('Dados da Atividade Preponderante') }}</div>
+            @if(isset($objeto))
+                <form method="POST" action="{{ route('atividade_preponderante.update', $objeto->id) }}">
+                    {{ method_field('PATCH') }}
+            @else
+                <form method="POST" action="{{ route('atividade_preponderante.store') }}">
+                 
+            @endif
 
-                <div class="card-body">
-                    @if(isset($objeto))
-                        <form method="POST" action="{{ route('atividade_preponderante.update', $objeto->id) }}">
-                            {{ method_field('PATCH') }}
-                    @else
-                        <form method="POST" action="{{ route('atividade_preponderante.store') }}">
-                         
-                    @endif
+                @csrf
+                <input type="hidden" id="total_parametros" value="@if(isset($objeto)){{sizeof($objeto->AtividadeParametroMinimo)}}@else{{__('0')}}@endif">
 
-                        @csrf
-                        <input type="hidden" id="total_parametros" value="@if(isset($objeto)){{sizeof($objeto->AtividadeParametroMinimo)}}@else{{__('0')}}@endif">
+                <div class="card">
+                    <div class="card-header">{{ __('Dados da Atividade Preponderante') }}</div>
 
+                    <div class="card-body">
+                        
                         {{-- ERROS --}}
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
                                 <ul>
                                     @foreach ($errors->all() as $error)
-                                     <li>{{ $error }}</li>
+                                        <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
                             </div>
@@ -48,50 +49,55 @@
                             </div>
                         </div>
 
-                        {{-- PARAMETROS --}}
-                        <div class="card">
-                            <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
-                                <div class="card-body">
-                                        <button type="button" class="btn btn-primary circular" id="mais">+</button>
-                                        <button type="button" class="btn btn-danger circular" id="menos">-</button>
-                                    <div class="form-group row content-param" id="body-param">
-                                        <div id="content-param">
-                                            <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
-                                            
-                                            <div class="col-md-6">
-                                                <select class="form-control parametros" name="parametros[]" required >
-                                                    <option id="selected" value="" selected="selected" >Selecione...</option>
-                                                
-                                                    @foreach ($parametros as $parametro)
-                                                        <option value="{{$parametro->id}}" > {{$parametro->descricao}} </option>
-                                                    @endforeach
-                                                </select>
+                        
+                    </div>
+                </div>
 
-                                                @if ($errors->has('parametros'))
-                                                    <span class="invalid-feedback">
-                                                        <strong>{{ $errors->first('parametros') }}</strong>
-                                                    </span>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
+                {{-- PARAMETROS --}}
+                <div class="card">
+                    <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
+                    <div class="card-body">
+                            <button type="button" class="btn btn-primary circular" id="mais">+</button>
+                            <button type="button" class="btn btn-danger circular" id="menos">-</button>
+                        <div class="form-group row content-param" id="body-param">
+                            <div id="content-param">
+                                <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
+                                
+                                <div class="col-md-6">
+                                    <select class="form-control parametros" name="parametros[]" required >
+                                        <option id="selected" value="" selected="selected" >Selecione...</option>
                                     
+                                        @foreach ($parametros as $parametro)
+                                            <option value="{{$parametro->id}}" > {{$parametro->descricao}} </option>
+                                        @endforeach
+                                    </select>
+
+                                    @if ($errors->has('parametros'))
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('parametros') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
                             </div>
-                        </div> 
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                        </div>
+                        
+                    </div>
+                    
+                </div> 
+                <div class="container">
+                    <div class="form-group row mb-0">
+                        <div class="col-md-12">
+                            <center>
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Salvar') }}
                                 </button>
 
                                 <a class="btn btn-danger" href="{{ route('atividade_preponderante.index') }}">{{ __('Cancelar') }}</a>
-                            </div>
+                            </center>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

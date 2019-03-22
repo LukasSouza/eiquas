@@ -8,20 +8,19 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8 py-5">
-            <div class="card">
-                <div class="card-header">{{ __('Dados da Amostra') }}</div>
+        <div class="col-md-9 py-5">
+            @if(isset($objeto))
+            <form method="POST" action="{{ route('amostra.update', $objeto->id) }}">
+                {{ method_field('PATCH') }}
+            @else
+                <form method="POST" action="{{ route('amostra.confirm') }}">
+            @endif
+                @csrf
 
-                <div class="card-body">
-                    @if(isset($objeto))
-                        <form method="POST" action="{{ route('amostra.update', $objeto->id) }}">
-                            {{ method_field('PATCH') }}
-                    @else
-                        <form method="POST" action="{{ route('amostra.confirm') }}">
-                    @endif
+                <div class="card">
+                    <div class="card-header">{{ __('Dados da Amostra') }}</div>
 
-                        @csrf
-
+                    <div class="card-body">
                         {{-- ERROS --}}
                         @if (count($errors) > 0)
                             <div class="alert alert-danger">
@@ -148,62 +147,65 @@
                         </div>
 
                          {{-- PARAMETROS --}}
-                        <div class="card">
-                                <div class="card-header">{{ __('Parâmetros Obrigatórios') }}</div>
-                                    <div class="card-body">
-                                            <button type="button" class="btn btn-primary circular" id="mais">+</button>
-                                            <button type="button" class="btn btn-danger circular" id="menos">-</button>
-                                        <div class="form-group row content-param" id="body-param">
-                                            <div id="content-param">
-                                                <label for="parametros" id='label-param' class="col-md-2 col-form-label text-md-right">Parametro</label>
-                                                
-                                                <div class="col-md-4">
-                                                    <select class="form-control parametros" name="parametros[]" required >
-                                                        <option id="selected" value="" selected="selected" >Selecione...</option>
-                                                    
-                                                        @foreach ($parametros as $parametro)
-                                                            <option value="{{$parametro->id}}" > {{$parametro->descricao}} </option>
-                                                        @endforeach
-                                                    </select>
-    
-                                                    @if ($errors->has('parametros'))
-                                                        <span class="invalid-feedback">
-                                                            <strong>{{ $errors->first('parametros') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
+                            
+                    </div>
+                </div>
 
-                                                <label for="concentracao" id='label-param' class="col-md-2 col-form-label text-md-right">Concentração</label>
-                                                
-                                                <div class="col-md-3">
-                                                    <input type="text" class="form-control{{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)) {{ $objeto->numero_amostra }} @endif" required autofocus maxlength="45">
-    
-                                                    @if ($errors->has('concentracao'))
-                                                        <span class="invalid-feedback">
-                                                            <strong>{{ $errors->first('concentracao') }}</strong>
-                                                        </span>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
+                <div class="card">
+                    <div class="card-header">{{ __('Parâmetros Para Análise') }}</div>
+                    <div class="card-body">
+                            <button type="button" class="btn btn-primary circular" id="mais">+</button>
+                            <button type="button" class="btn btn-danger circular" id="menos">-</button>
+                        <div class="form-group row content-param" id="body-param">
+                            <div id="content-param">
+                                <label for="parametros" id='label-param' class="col-md-2 col-form-label text-md-right">Parametro</label>
+                                
+                                <div class="col-md-4">
+                                    <select class="form-control parametros" name="parametros[]" required >
+                                        <option id="selected" value="" selected="selected" >Selecione...</option>
+                                    
+                                        @foreach ($parametros as $parametro)
+                                            <option value="{{$parametro->id}}" > {{$parametro->descricao}} ({{$parametro->unidade_medida}}) </option>
+                                        @endforeach
+                                    </select>
+
+                                    @if ($errors->has('parametros'))
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('parametros') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
-                            </div> 
 
+                                <label for="concentracao" id='label-param' class="col-md-2 col-form-label text-md-right">Concentração</label>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                                <div class="col-md-3">
+                                    <input type="text" class="form-control{{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)) {{ $objeto->numero_amostra }} @endif" required autofocus maxlength="45">
+
+                                    @if ($errors->has('concentracao'))
+                                        <span class="invalid-feedback">
+                                            <strong>{{ $errors->first('concentracao') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="container">
+                    <div class="form-group row mb-0">
+                        <div class="col-md-12">
+                            <center>
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Continuar') }}
                                 </button>
 
                                 <a class="btn btn-danger" href="{{ route('amostra.index') }}">{{ __('Cancelar') }}</a>
-                            </div>
+                            </center>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -272,7 +274,6 @@
                 if(contador < total){ 
                     $('#body-param').last().append(existingdiv1);
                     contador++;
-                    $('#label-param').last().html('Parâmetro '+contador);
                     ocultarOpcaoSelecionada('.parametros');
                 }
                 else
@@ -282,7 +283,6 @@
                 if(contador > 1){
                     $('#content-param:last-child').remove();
                     contador--;
-                    $('#label-param').html('Parâmetro '+contador);
                     ocultarOpcaoSelecionada('.parametros');
                 }
                 else
