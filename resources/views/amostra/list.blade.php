@@ -25,9 +25,9 @@
         				<td>{{$obj->descricao}}</td>
         				<td class="d-flex justify-content-center">
 
-                            <form action="{{ route('amostra.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
+                            <form action="{{ route('amostra.show', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
-               						<i class="glyphicon glyphicon-pencil"></i> Editar
+               						<i class="glyphicon glyphicon-search"></i> Visualizar
                				    </button>
                             </form>
 

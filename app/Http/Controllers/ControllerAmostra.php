@@ -8,11 +8,24 @@ use App\Models\Amostra as Model;
 use App\Models\AtividadeParametroMin as AtividadeParametroMin;
 use App\Models\Objetivo as Objetivo;
 use App\Models\AtividadePreponderante as AtividadePreponderante;
+use App\Models\AmostraAlteracao as AmostraAlteracao;
+use App\Models\AmostraAlteracaoParametro as AmostraAlteracaoParametro;
+use App\Models\ObjetivoAlteracaoParametro as ObjetivoAlteracaoParametro;
+use App\Models\CategoriaParametro as CategoriaParametro;
 use App\Models\Parametro as Parametro;
 use function Opis\Closure\unserialize;
+use App\Models\Categoria;
 class ControllerAmostra extends Controller
 {
     var $rota_list = 'amostra';
+
+    private function menor_nota($x, $y){
+        if($x < $y)
+            return $x;
+        else
+            return $y;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,17 +56,89 @@ class ControllerAmostra extends Controller
     public function store(Request $request)
     {
         $request = unserialize($request->array);
-        dd($request);
-        $Model = new Model;
-        $Model->descricao = $request->descricao;
-        $Model->id_atividade_preponderante = $request->atividade_preponderante;
-        $Model->ponto_coleta = $request->ponto_coleta;
-        $Model->data_coleta = $request->data_coleta;
-        $Model->condicao_tempo = $request->condicao_tempo;
-        $Model->numero_amostra = $request->numero_amostra;
+        //dd($request);
+        //Salvar Amostra
+        $amostra = new Model;
+        $amostra->descricao = $request->descricao;
+        $amostra->id_atividade_preponderante = $request->atividade_preponderante;
+        $amostra->ponto_coleta = $request->ponto_coleta;
+        $amostra->data_coleta = $request->data_coleta;
+        $amostra->condicao_tempo = $request->condicao_tempo;
+        $amostra->numero_amostra = $request->numero_amostra;
+        $amostra->save();
 
-        $Model->save();
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        //procurar as alterações ligadas aos parametros/Objetivo
+        $objetivoAlteracaoParametros = ObjetivoAlteracaoParametro::where('fk_objetivo',$request->objetivo)->whereIn('fk_parametro',$request->parametros)->get();
+
+        $array_fk_alteracoes = Array();
+        //Salvar na tabela AmostraAlteracaoParametro e AmostraAlteracaoParametro
+        foreach($objetivoAlteracaoParametros as $key => $objAltParam){
+            $amostraAlteracao = new AmostraAlteracao;
+            $amostraAlteracao->fk_amostra = $amostra->id;
+            $amostraAlteracao->fk_alteracao = $objAltParam->fk_alteracao;
+            $amostraAlteracao->nota_alteracao = 100;
+
+            //Não Salvar AmostraAlteracao com msms ID's
+            if(!in_array($objAltParam->fk_alteracao, $array_fk_alteracoes)){
+                $amostraAlteracao->save();
+                //Array de verificação de id's salvos
+                $array_fk_alteracoes[] = $objAltParam->fk_alteracao;
+            }
+
+            //Definindo a nota de cada parâmetro..
+            $categoriaParametros = CategoriaParametro::where('fk_parametro',$objAltParam->fk_parametro)->orderBy('concentracao_superior', 'asc')->get();
+            foreach($categoriaParametros as $categoriaParametro){
+
+                if($categoriaParametro->concentracao_superior >= $request->concentracao[$key]){
+                    echo $categoriaParametro->concentracao_superior ." > ". $request->concentracao[$key]."<br>";
+                    $categoria = $categoriaParametro->fk_categoria;
+                    break;
+                } 
+            }
+            //Salvando os cada parametro e alteracao da amostra
+            $AmostraAlteracaoParametro = new AmostraAlteracaoParametro;
+            $AmostraAlteracaoParametro->fk_amostra = $amostra->id;
+            $AmostraAlteracaoParametro->fk_alteracao = $objAltParam->fk_alteracao;
+            $AmostraAlteracaoParametro->fk_parametro = $objAltParam->fk_parametro;
+            $AmostraAlteracaoParametro->concentracao = $request->concentracao[$key];
+            $AmostraAlteracaoParametro->nota_parametro = $categoria;
+            $AmostraAlteracaoParametro->save();
+
+            
+        }
+      
+        //calcular a Categoria (Nota), de cada alteracao
+        $ArrayMenorConcentracaoAlteracao = Array();
+        $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::leftJoin('categoria', 'nota_parametro', '=', 'categoria.id')->where('fk_amostra',$amostra->id)->get();
+        foreach($array_fk_alteracoes as $key => $id_alteracao){
+            $ArrayMenorConcentracaoAlteracao[$key] = 999;
+            foreach($ArrayAmostraAlteracaoParametro as $amostraAlteracaoParametro){
+                if($id_alteracao == $amostraAlteracaoParametro->fk_alteracao){
+                    $ArrayMenorConcentracaoAlteracao[$key] = $this->menor_nota($ArrayMenorConcentracaoAlteracao[$key], $amostraAlteracaoParametro->nota);
+                }
+            }
+        }
+       
+        //Salvar Notas das alterações
+        foreach($ArrayMenorConcentracaoAlteracao as $key => $nota){
+            $categoria = Categoria::where('nota', $nota)->first();
+  
+            $amostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->where('fk_alteracao',$array_fk_alteracoes[$key])->first();
+            $amostraAlteracao->nota_alteracao = $categoria->id;
+            $amostraAlteracao->save();
+        }
+      
+        //calcular a Categoria (Nota) da Amostra
+        $notaAmostra = min($ArrayMenorConcentracaoAlteracao);
+        $categoria = Categoria::where('nota', $notaAmostra)->first();
+       
+        $amostraUpdate = Model::find($amostra->id);
+        $amostraUpdate->eiquas = $categoria->id;
+        $amostraUpdate->save();
+        //Ir para tela de Exibição de Resultado
+        $id = $amostraUpdate->id;
+        
+        return redirect()->route($this->rota_list.'.show', $id)->with('status', 'Cadastrado Realizado com Sucesso!');
     }
 
     /**
@@ -64,7 +149,23 @@ class ControllerAmostra extends Controller
      */
     public function show($id)
     {
-        //
+        $amostra = Model::find($id);
+        $objetivo = Objetivo::find(1);
+        $atividadePreponderante = AtividadePreponderante::where('id', $amostra->id_atividade_preponderante)->first();
+        $categoria = Categoria::where('id',$amostra->eiquas)->first();
+
+        $arrayAmostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->first();
+        $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::where('fk_amostra', $amostra->id)->first();
+
+        return view('amostra.view',
+            ['amostra' => $amostra,
+             'objetivo' => $objetivo,  
+             'categoria' => $categoria, 
+             'arrayAmostraAlteracao' => $arrayAmostraAlteracao, 
+             'ArrayAmostraAlteracaoParametro' => $ArrayAmostraAlteracaoParametro,
+             'atividadePreponderante' => $atividadePreponderante
+            ]
+        );
     }
 
     /**
@@ -154,4 +255,6 @@ class ControllerAmostra extends Controller
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
+
+
 }

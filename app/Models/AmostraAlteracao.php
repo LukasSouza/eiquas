@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class AmostraAlteracao extends Model
 {
-    protected $table = 'amostra_alteracao';
+    protected $table = 'amostraalteracao';
     protected $primaryKey = ['fk_amostra', 'fk_alteracao'];
     public $incrementing = false;
 
