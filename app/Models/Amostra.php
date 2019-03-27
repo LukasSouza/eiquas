@@ -20,7 +20,11 @@ class Amostra extends Model
 
     public function AmostraAlteracao()
     {
-        return $this->belongsTo('App\Models\AmostraAlteracao', 'fk_amostra', 'id');
+        return $this->belongsTo('App\Models\AmostraAlteracao', 'id', 'fk_amostra');
+    }
+    public function AmostraAlteracaoParametro()
+    {
+        return $this->belongsTo('App\Models\AmostraAlteracaoParametro', 'id', 'fk_amostra');
     }
 
 }

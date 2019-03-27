@@ -15,7 +15,7 @@ class CreateAlteracao extends Migration
     {
         Schema::create('alteracao', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('descricao',45);
+            $table->string('descricao',45)->unique();
             $table->timestamps();
         });
     }

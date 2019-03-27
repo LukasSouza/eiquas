@@ -34,7 +34,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Descrição') }}</label>
 
                             <div class="col-md-6">
-                                <input id="descricao" type="text" class="form-control" name="descricao" value="@if(isset($objeto)) {{ $objeto->descricao}} @endif" maxlength="80" required autofocus>
+                                <input id="descricao" type="text" class="form-control" name="descricao" value="@if(isset($objeto)){{ $objeto->descricao}}@endif" maxlength="80" required autofocus>
 
                                 @if ($errors->has('descricao'))
                                     <span class="invalid-feedback">
@@ -49,7 +49,7 @@
                             <label for="nota" class="col-md-4 col-form-label text-md-right">{{ __('Nota') }}</label>
 
                             <div class="col-md-6">
-                                <input id="nota" type="text" class="form-control" name="nota" value="@if(isset($objeto)) {{ $objeto->nota}} @endif" maxlength="11" required autofocus>
+                                <input id="nota" type="number" min="0" max="100" class="form-control" name="nota" value="@if(isset($objeto)){{$objeto->nota}}@endif" maxlength="11" required autofocus>
 
                                 @if ($errors->has('nota'))
                                     <span class="invalid-feedback">
@@ -64,7 +64,7 @@
                             <label for="qualidade" class="col-md-4 col-form-label text-md-right">{{ __('Qualidade') }}</label>
 
                             <div class="col-md-6">
-                                <input id="qualidade" type="text" class="form-control" name="qualidade" value="@if(isset($objeto)) {{ $objeto->qualidade}} @endif" maxlength="10" required autofocus>
+                                <input id="qualidade" type="text" class="form-control" name="qualidade" value="@if(isset($objeto)){{$objeto->qualidade}}@endif" maxlength="10" required autofocus>
 
                                 @if ($errors->has('qualidade'))
                                     <span class="invalid-feedback">
@@ -79,7 +79,7 @@
                             <label for="semaforo" class="col-md-4 col-form-label text-md-right">{{ __('Semáforo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="semaforo" type="text" class="form-control" name="semaforo" value="@if(isset($objeto)) {{ $objeto->semaforo}} @endif" maxlength="10" required autofocus>
+                                <input id="semaforo" type="text" class="form-control" name="semaforo" value="@if(isset($objeto)){{$objeto->semaforo}}@endif" maxlength="10" required autofocus>
 
                                 @if ($errors->has('semaforo'))
                                     <span class="invalid-feedback">
@@ -105,9 +105,3 @@
     </div>
 </div>
 @endsection
-
-<style type="text/css">
-    .card {
-        background-color: white;
-    }
-</style>

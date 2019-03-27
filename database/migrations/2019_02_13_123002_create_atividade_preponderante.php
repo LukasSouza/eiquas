@@ -15,7 +15,7 @@ class CreateAtividadePreponderante extends Migration
     {
         Schema::create('atividade_preponderante', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('descricao',45);
+            $table->string('descricao',45)->unique();
             $table->timestamps();
         });
     }

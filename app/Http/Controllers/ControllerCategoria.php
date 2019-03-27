@@ -43,8 +43,13 @@ class ControllerCategoria extends Controller
         $Model->qualidade = $request->qualidade;
         $Model->semaforo = $request->semaforo;
 
-        $Model->save();
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -85,8 +90,13 @@ class ControllerCategoria extends Controller
         $Model->qualidade = $request->qualidade;
         $Model->semaforo = $request->semaforo;
 
-        $Model->save();
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -104,7 +114,12 @@ class ControllerCategoria extends Controller
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
 
-        Model::find($id)->delete();
+        try{
+            $objeto->delete();
+        }
+        catch(\Exception $e){
+            return redirect()->route($this->rota_list.'.index')->with('error', 'Falha ao Excluir. Verifique se o item está sendo usado por algum cadastro no sistema.');
+        }
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }

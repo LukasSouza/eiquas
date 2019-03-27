@@ -6,11 +6,16 @@
             {{ session('status') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <h2>Parâmetros</h2>
     <p class="separator"></p>
     <div class="table-responsive">
-        <table class="table table-striped table-bordered" id="dataTable" aria-describedby="users_table" role="grid">
+        <table class="table table-striped table-bordered" id="dataTableParam" aria-describedby="users_table" role="grid">
             <thead>
     			<tr>
                     <th>Alteração</th>
@@ -62,9 +67,3 @@
     <a class="btn btn-primary" href="{{ route('parametro.create') }}">{{ __('Novo Parâmetro') }}</a>
 
 @endsection
-
-<style type="text/css">
-    .container-fluid {
-        background-color: white;
-    }
-</style>

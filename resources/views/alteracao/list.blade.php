@@ -7,6 +7,11 @@
             {{ session('status') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <h2>Alterações</h2>
     <p class="separator"></p>
@@ -53,8 +58,3 @@
 
 @endsection
 
-<style type="text/css">
-    .container-fluid {
-        background-color: white;
-    }
-</style>

@@ -48,23 +48,27 @@ class ControllerParametro extends Controller
         $Model->limite_conama = $request->limite_conama;
         $Model->limite_oms = $request->limite_oms;
 
-        $Model->save();
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            $ObjetivoAlteracaoParametro = new ObjetivoAlteracaoParametro;
+            $ObjetivoAlteracaoParametro->fk_alteracao = $request->alteracao;
+            $ObjetivoAlteracaoParametro->fk_parametro = $Model->id;
+            $ObjetivoAlteracaoParametro->fk_objetivo = 1;
+            $ObjetivoAlteracaoParametro->save();
 
-        $ObjetivoAlteracaoParametro = new ObjetivoAlteracaoParametro;
-        $ObjetivoAlteracaoParametro->fk_alteracao = $request->alteracao;
-        $ObjetivoAlteracaoParametro->fk_parametro = $Model->id;
-        $ObjetivoAlteracaoParametro->fk_objetivo = 1;
-        $ObjetivoAlteracaoParametro->save();
-
-        foreach ($request->concentracao_superior as $key => $concentracao_superior) {
-            $CategoriaParametro = new CategoriaParametro;
-            $CategoriaParametro->fk_categoria = $key+1;
-            $CategoriaParametro->fk_parametro = $Model->id;
-            $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
-            $CategoriaParametro->save();
+            foreach ($request->concentracao_superior as $key => $concentracao_superior) {
+                $CategoriaParametro = new CategoriaParametro;
+                $CategoriaParametro->fk_categoria = $key+1;
+                $CategoriaParametro->fk_parametro = $Model->id;
+                $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
+                $CategoriaParametro->save();
+            }
+        
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
         }
-
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -106,19 +110,24 @@ class ControllerParametro extends Controller
         $Model->numero_registro_cas = $request->numero_registro_cas;
         $Model->limite_conama = $request->limite_conama;
         $Model->limite_oms = $request->limite_oms;
-        $Model->save();
 
-        $ObjetivoAlteracaoParametro = ObjetivoAlteracaoParametro::where('fk_parametro', $id)->where('fk_objetivo','1')->first();
-        $ObjetivoAlteracaoParametro->fk_alteracao = (int)$request->alteracao;
-        $ObjetivoAlteracaoParametro->save();
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            $ObjetivoAlteracaoParametro = ObjetivoAlteracaoParametro::where('fk_parametro', $id)->where('fk_objetivo','1')->first();
+            $ObjetivoAlteracaoParametro->fk_alteracao = (int)$request->alteracao;
+            $ObjetivoAlteracaoParametro->save();
 
-        foreach ($request->concentracao_superior as $key => $concentracao_superior) {
-            $CategoriaParametro = CategoriaParametro::where('fk_parametro', $id)->where('fk_categoria', $key+1)->first();
-            $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
-            $CategoriaParametro->save();
+            foreach ($request->concentracao_superior as $key => $concentracao_superior) {
+                $CategoriaParametro = CategoriaParametro::where('fk_parametro', $id)->where('fk_categoria', $key+1)->first();
+                $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
+                $CategoriaParametro->save();
+            }
+
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
         }
-
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -135,12 +144,17 @@ class ControllerParametro extends Controller
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
 
-        $objeto->ObjetivoAlteracaoParametro()->delete();
-        $objeto->AmostraAlteracaoParametro()->delete();
-        $objeto->CategoriaParametro()->delete();
-        $objeto->AtividadeParametroMin()->delete();
-        $objeto->delete();
-
+        try{
+            $objeto->ObjetivoAlteracaoParametro()->delete();
+            $objeto->AmostraAlteracaoParametro()->delete();
+            $objeto->CategoriaParametro()->delete();
+            $objeto->AtividadeParametroMin()->delete();
+            $objeto->delete();
+        }
+        catch(\Exception $e){
+            return redirect()->route($this->rota_list.'.index')->with('error', 'Falha ao Excluir. Verifique se o item está sendo usado por algum cadastro no sistema.');
+        }
+        
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
 }

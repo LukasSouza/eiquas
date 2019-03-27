@@ -7,6 +7,11 @@
             {{ session('status') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <h2>Atividade Preponderante</h2>
     <p class="separator"></p>
@@ -26,7 +31,7 @@
         				<td class="d-flex justify-content-center">
 
                             <form action="{{ route('atividade_preponderante.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
-               					<button type="submit" class="btn btn-primary">
+               					<button type="submit" class="btn btn-sm btn-primary">
                						<i class="glyphicon glyphicon-pencil"></i> Editar
                				    </button>
                             </form>
@@ -34,7 +39,7 @@
                             <form action="{{ route('atividade_preponderante.destroy', $obj->id) }}" method="POST">
                                 @csrf
                                 {{ method_field('DELETE') }}
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Deseja realmente Excluir?')">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente Excluir?')">
                                     <i class="glyphicon glyphicon-trash"></i>Excluir
                                 </button>
                             </form>
@@ -52,9 +57,3 @@
     <a class="btn btn-primary" href="{{ route('atividade_preponderante.create') }}">{{ __('Nova Atividade Preponderante') }}</a>
 
 @endsection
-
-<style type="text/css">
-    .container-fluid {
-        background-color: white;
-    }
-</style>
