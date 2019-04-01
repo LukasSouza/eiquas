@@ -7,6 +7,11 @@
             {{ session('status') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <h2>Amostras</h2>
     <p class="separator"></p>
@@ -15,6 +20,8 @@
             <thead>
     			<tr>
                     <th>Descricao</th>
+                    <th>Ponto de Coleta</th>
+                    <th>Número da Amostra</th>
                     <th>Opções</th>
                 </tr>
     		</thead>
@@ -23,6 +30,8 @@
 
                     <tr role="row" class="odd">
         				<td>{{$obj->descricao}}</td>
+        				<td>{{$obj->ponto_coleta}}</td>
+        				<td>{{$obj->numero_amostra}}</td>
         				<td class="d-flex justify-content-center">
 
                             <form action="{{ route('amostra.show', $obj->id) }}" method="GET" style="margin-right:10px;">
@@ -52,9 +61,3 @@
     <a class="btn btn-primary" href="{{ route('amostra.create') }}">{{ __('Nova Amostra') }}</a>
 
 @endsection
-
-<style type="text/css">
-    .container-fluid {
-        background-color: white;
-    }
-</style>

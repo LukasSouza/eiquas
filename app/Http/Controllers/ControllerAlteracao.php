@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Alteracao;
 use Illuminate\Http\Request;
 use App\Models\Alteracao as Model;
 class ControllerAlteracao extends Controller
@@ -15,7 +14,7 @@ class ControllerAlteracao extends Controller
      */
     public function index()
     {
-        $objetos = Model::all();
+        $objetos = Model::all()->sortBy("descricao");
         return view($this->rota_list.'.list',compact('objetos') );
     }
 
@@ -40,8 +39,13 @@ class ControllerAlteracao extends Controller
         $Model = new Model;
         $Model->descricao = $request->descricao;
 
-        $Model->save();
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -79,8 +83,14 @@ class ControllerAlteracao extends Controller
         $Model = Model::find($id);
         $Model->descricao = $request->descricao;
 
-        $Model->save();
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
+        
     }
 
     /**
@@ -97,8 +107,13 @@ class ControllerAlteracao extends Controller
            echo "Código Invalido";
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
-
-        Model::find($id)->delete();
+        
+        try{
+            $objeto->delete();
+        }
+        catch(\Exception $e){
+            return redirect()->route($this->rota_list.'.index')->with('error', 'Falha ao Excluir. Verifique se o item está sendo usado por algum cadastro no sistema.');
+        }
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }

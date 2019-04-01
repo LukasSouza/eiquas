@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php
     $objeto = (object)$objeto;
-    //dd($objeto);
+    $alerta = 'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.<br>O resultado da Análise não será totalmente confiavel'
 @endphp
 @section('content')
 
@@ -10,8 +10,7 @@
         <div class="col-md-8 py-5">
             @if (!empty($parametros_obrigatorios_nao_escolhidos))
                 <div class="alert alert-danger">
-                   {{'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.'}}<br>
-                   {{'O resultado da Análise não será totalmente confiavel'}}
+                   {{$alerta}}
                 </div>
             @endif
             <div class="card">
@@ -20,6 +19,7 @@
                     <form method="POST" action="{{ route('amostra.store') }}">
                         @csrf
                         <input type="hidden" name="array" value="{{serialize($objeto)}}">
+                        <input type="hidden" name="parametros_obrigatorios_nao_escolhidos" value="@if(!empty($parametros_obrigatorios_nao_escolhidos)){{$alerta}}@endif">
                         <center><h3>Dados da Amostra</h3></center>
                         <table>
                             <tbody>
@@ -87,22 +87,21 @@
 </div>
 @endsection
 
-<style type="text/css">
-    .card {
-        background-color: white;
-    }
-    table{
-        width: 100%;
-    }
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 10px;
-        text-align: left;    
-    }
-    center h3, table{
-        margin:10px;
-    }
-</style>
+@section('pagestyle')
+    <style type="text/css">
+        table{
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;    
+        }
+        center h3, table{
+            margin:10px;
+        }
+    </style>
+@endsection

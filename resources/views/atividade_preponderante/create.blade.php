@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $parametros = DB::table('parametro')->get();
+    $parametros = DB::table('parametro')->orderBy('descricao')->get();
 @endphp
 @section('content')
 
@@ -39,7 +39,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Descrição') }}</label>
 
                             <div class="col-md-6">
-                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@if(isset($objeto)) {{ $objeto->descricao}} @endif" maxlength="45" required autofocus>
+                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@if(isset($objeto)){{$objeto->descricao}}@endif" maxlength="45" required autofocus>
 
                                 @if ($errors->has('descricao'))
                                     <span class="invalid-feedback">
@@ -61,7 +61,7 @@
                             <button type="button" class="btn btn-danger circular" id="menos">-</button>
                         <div class="form-group row content-param" id="body-param">
                             <div id="content-param">
-                                <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro 1</label>
+                                <label for="parametros" id='label-param' class="col-md-4 col-form-label text-md-right">Parametro</label>
                                 
                                 <div class="col-md-6">
                                     <select class="form-control parametros" name="parametros[]" required >
@@ -167,7 +167,7 @@
                 if(contador < total){ 
                     $('#body-param').last().append(existingdiv1);
                     contador++;
-                    $('#label-param').last().html('Parâmetro '+contador);
+                    // $('#label-param').last().html('Parâmetro '+contador);
                     ocultarOpcaoSelecionada('.parametros');
                 }
                 else
@@ -177,7 +177,7 @@
                 if(contador > 1){
                     $('#content-param:last-child').remove();
                     contador--;
-                    $('#label-param').html('Parâmetro '+contador);
+                    // $('#label-param').html('Parâmetro '+contador);
                     ocultarOpcaoSelecionada('.parametros');
                 }
                 else

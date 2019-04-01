@@ -6,6 +6,11 @@
             {{ session('status') }}
         </div>
     @endif
+    @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
 
     <h2>Categorias</h2>
     <p class="separator"></p>
@@ -55,9 +60,3 @@
     <a class="btn btn-primary" href="{{ route('categoria.create') }}">{{ __('Nova Categoria') }}</a>
 
 @endsection
-
-<style type="text/css">
-    .container-fluid {
-        background-color: white;
-    }
-</style>

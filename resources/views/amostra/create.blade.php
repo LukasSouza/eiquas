@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @php
-    $objetivos = DB::table('objetivo')->get();
-    $parametros = DB::table('parametro')->get();
-    $atividades_preponderantes = DB::table('atividade_preponderante')->get();
+    $objetivos = DB::table('objetivo')->orderBy('descricao')->get();
+    $parametros = DB::table('parametro')->orderBy('descricao')->get();
+    $atividades_preponderantes = DB::table('atividade_preponderante')->orderBy('descricao')->get();
 @endphp
 @section('content')
 
@@ -34,7 +34,7 @@
                         
                         {{-- OBJETIVO --}}
                         <div class="form-group row">
-                            <label for="objetivo" class="col-md-4 col-form-label text-md-right">{{ __('Objetivo da Análise') }}</label>
+                            <label for="objetivo" class="col-md-4 col-form-label text-md-right">{{ __('Objetivo da Avaliação') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control objetivo" name="objetivo" required >
@@ -59,7 +59,7 @@
                                 <select class="form-control atividade_preponderante" name="atividade_preponderante" required >
                                     <option id="selected" value="" selected="selected" >Selecione...</option>                              
                                     @foreach ($atividades_preponderantes as $atividade_preponderante)
-                                        <option value="{{$atividade_preponderante->id}}" > {{$atividade_preponderante->descricao}} </option>
+                                        <option value="{{$atividade_preponderante->id}}" >{{$atividade_preponderante->descricao}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('descricao'))
@@ -76,7 +76,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Descrição') }}</label>
 
                             <div class="col-md-6">
-                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@if(isset($objeto)) {{ $objeto->descricao}} @endif" required autofocus maxlength="45">
+                                <input id="descricao" type="text" class="form-control{{ $errors->has('descricao') ? ' is-invalid' : '' }}" name="descricao" value="@if(isset($objeto)){{$objeto->descricao}}@endif" required autofocus maxlength="45">
 
                                 @if ($errors->has('descricao'))
                                     <span class="invalid-feedback">
@@ -91,7 +91,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Ponto de Coleta') }}</label>
 
                             <div class="col-md-6">
-                                <input id="ponto_coleta" type="text" class="form-control{{ $errors->has('ponto_coleta') ? ' is-invalid' : '' }}" name="ponto_coleta" value="@if(isset($objeto)) {{ $objeto->ponto_coleta}} @endif" required autofocus maxlength="45">
+                                <input id="ponto_coleta" type="text" class="form-control{{ $errors->has('ponto_coleta') ? ' is-invalid' : '' }}" name="ponto_coleta" value="@if(isset($objeto)){{$objeto->ponto_coleta}}@endif" required autofocus maxlength="45">
 
                                 @if ($errors->has('ponto_coleta'))
                                     <span class="invalid-feedback">
@@ -106,7 +106,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Data da Coleta') }}</label>
 
                             <div class="col-md-6">
-                                <input id="data_coleta" type="date" class="form-control{{ $errors->has('data_coleta') ? ' is-invalid' : '' }}" name="data_coleta" value="@if(isset($objeto)) {{ $objeto->data_coleta}} @endif" required autofocus>
+                                <input id="data_coleta" type="date" class="form-control{{ $errors->has('data_coleta') ? ' is-invalid' : '' }}" name="data_coleta" value="@if(isset($objeto)){{$objeto->data_coleta}}@endif" required autofocus>
 
                                 @if ($errors->has('data_coleta'))
                                     <span class="invalid-feedback">
@@ -118,11 +118,16 @@
 
                         {{-- CONDIÇÃO DO TEMPO --}}
                         <div class="form-group row">
-                            <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Condição Climática') }}</label>
+                            <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Condição do Tempo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="condicao_tempo" type="text" class="form-control{{ $errors->has('condicao_tempo') ? ' is-invalid' : '' }}" name="condicao_tempo" value="@if(isset($objeto)) {{ $objeto->condicao_tempo}} @endif" required autofocus maxlength="45">
-
+                                <select class="form-control condicao_tempo" name="condicao_tempo" required >
+                                    <option value="">Selecione...</option>
+                                    <option value="Ensolarado" @if(isset($objeto) && $objeto->condicao_tempo == 'Ensolarado'){{ __("selected='selected'") }}@endif >Ensolarado</option>
+                                    <option value="Nublado sem chuvas" @if(isset($objeto) && $objeto->condicao_tempo == 'Nublado sem chuvas'){{ __("selected='selected'") }}@endif >Nublado sem chuvas</option>
+                                    <option value="Chuvoso" @if(isset($objeto) && $objeto->condicao_tempo == 'Chuvoso'){{ __("selected='selected'") }}@endif >Chuvoso</option>
+                                </select>
+                                
                                 @if ($errors->has('condicao_tempo'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('condicao_tempo') }}</strong>
@@ -136,7 +141,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Numero da Amostra') }}</label>
 
                             <div class="col-md-6">
-                                <input id="numero_amostra" type="text" class="form-control{{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="numero_amostra" value="@if(isset($objeto)) {{ $objeto->numero_amostra }} @endif" required autofocus maxlength="45">
+                                <input id="numero_amostra" type="text" class="form-control decimal {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="numero_amostra" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="45">
 
                                 @if ($errors->has('numero_amostra'))
                                     <span class="invalid-feedback">
@@ -165,7 +170,7 @@
                                         <option id="selected" value="" selected="selected" >Selecione...</option>
                                     
                                         @foreach ($parametros as $parametro)
-                                            <option value="{{$parametro->id}}" > {{$parametro->descricao}} ({{$parametro->unidade_medida}}) </option>
+                                            <option value="{{$parametro->id}}" >{{$parametro->descricao}} ({{$parametro->unidade_medida}})</option>
                                         @endforeach
                                     </select>
 
@@ -179,7 +184,7 @@
                                 <label for="concentracao" id='label-param' class="col-md-2 col-form-label text-md-right">Concentração</label>
 
                                 <div class="col-md-3">
-                                    <input type="text" class="form-control{{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)) {{ $objeto->numero_amostra }} @endif" required autofocus maxlength="45">
+                                    <input type="text" class="form-control decimal {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="11">
 
                                     @if ($errors->has('concentracao'))
                                         <span class="invalid-feedback">
@@ -213,9 +218,6 @@
 
 @section('pagestyle')
     <style type="text/css">
-        .card {
-            background-color: white;
-        }
         button.circular{
             border-radius: 50%;
         }

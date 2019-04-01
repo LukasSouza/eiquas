@@ -15,9 +15,11 @@ class CreateObjetivo extends Migration
     {
         Schema::create('objetivo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('descricao',45);
+            $table->string('descricao',45)->unique();
             $table->timestamps();
         });
+
+        DB::table('objetivo')->insert(array('descricao'=>'Consumo Humano'));
     }
 
     /**

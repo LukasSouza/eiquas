@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Resultado da análise:') }}</div>
                 <div class="card-body">
-                    <center><h3>Resultado da Análise</h3></center>
+                    <center><h3>Resultado da Avaliação</h3></center>
                     <table>
                         <tbody>
                             <tr>
@@ -98,22 +98,21 @@
 </div>
 @endsection
 
-<style type="text/css">
-    .card {
-        background-color: white;
-    }
-    table{
-        width: 100%;
-    }
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 10px;
-        text-align: left;    
-    }
-    center h3, table{
-        margin:10px;
-    }
-</style>
+@section('pagestyle')
+    <style type="text/css">
+        table{
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;    
+        }
+        center h3, table{
+            margin:10px;
+        }
+    </style>
+@endsection

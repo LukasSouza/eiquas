@@ -26,6 +26,9 @@
     #divCabecalho a{
         margin-right: 25px;
     }
+    .card {
+        background-color: white;
+    }
 </style>
 @yield('pagestyle')
 <body id="test2">
@@ -38,7 +41,7 @@
                     <a href="{{ route('categoria.index') }}">Categoria</a>
                     <a href="{{ route('parametro.index') }}">Parametro</a>
                     <a href="{{ route('atividade_preponderante.index') }}">Atividade Preponderante</a>
-                    <a href="{{ route('amostra.index') }}">Amostra</a>
+                    <a href="{{ route('amostra.index') }}">Análise de Amostras</a>
 
                 </div>
             </div>

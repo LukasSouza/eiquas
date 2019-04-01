@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\AtividadePreponderante;
 use Illuminate\Http\Request;
 use App\Models\AtividadePreponderante as Model;
 use App\Models\AtividadeParametroMin as AtividadeParametroMin;
@@ -17,7 +16,7 @@ class ControllerAtividadePreponderante extends Controller
      */
     public function index()
     {
-        $objetos = Model::all();
+        $objetos = Model::all()->sortBy('descricao');
         return view($this->rota_list.'.list',compact('objetos') );
     }
 
@@ -41,16 +40,22 @@ class ControllerAtividadePreponderante extends Controller
     {
         $Model = new Model;
         $Model->descricao = $request->descricao;
-        $Model->save();
 
-        foreach($request->parametros as $parametro):
-            $atividadeParametroMin = new AtividadeParametroMin;
-            $atividadeParametroMin->fk_parametro = $parametro;
-            $atividadeParametroMin->fk_atividade = $Model->id;
-            $atividadeParametroMin->save();
-        endforeach;
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            $Model->AtividadeParametroMinimo()->delete();
 
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+            foreach($request->parametros as $parametro){
+                $atividadeParametroMin = new AtividadeParametroMin;
+                $atividadeParametroMin->fk_parametro = $parametro;
+                $atividadeParametroMin->fk_atividade = $Model->id;
+                $atividadeParametroMin->save();
+            }
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
     }
 
     /**
@@ -88,17 +93,23 @@ class ControllerAtividadePreponderante extends Controller
         $request->flashOnly('parametros');
         $Model = Model::find($id);
         $Model->descricao = $request->descricao;
-        $Model->save();
-        $Model->AtividadeParametroMinimo()->delete();
 
-        foreach($request->parametros as $parametro):
-            $atividadeParametroMin = new AtividadeParametroMin;
-            $atividadeParametroMin->fk_parametro = $parametro;
-            $atividadeParametroMin->fk_atividade = $Model->id;
-            $atividadeParametroMin->save();
-        endforeach;
+        $duplicateEntry = VerifyDuplicateEntry($Model);
+        if(!$duplicateEntry){
+            $Model->AtividadeParametroMinimo()->delete();
 
-        return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+            foreach($request->parametros as $parametro){
+                $atividadeParametroMin = new AtividadeParametroMin;
+                $atividadeParametroMin->fk_parametro = $parametro;
+                $atividadeParametroMin->fk_atividade = $Model->id;
+                $atividadeParametroMin->save();
+            }
+            return redirect()->route($this->rota_list.'.index')->with('status', 'Dados Atualizados com Sucesso!');
+        }
+        else{
+            return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
+        }
+        
     }
 
     /**
@@ -116,8 +127,13 @@ class ControllerAtividadePreponderante extends Controller
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
 
-        $objeto->AtividadeParametroMinimo()->delete();
-        $objeto->delete();
+        try{
+            $objeto->AtividadeParametroMinimo()->delete();
+            $objeto->delete();
+        }
+        catch(\Exception $e){
+            return redirect()->route($this->rota_list.'.index')->with('error', 'Falha ao Excluir. Verifique se o item está sendo usado por algum cadastro no sistema.');
+        }
 
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
