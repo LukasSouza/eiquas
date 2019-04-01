@@ -20,6 +20,8 @@
             <thead>
     			<tr>
                     <th>Descricao</th>
+                    <th>Ponto de Coleta</th>
+                    <th>Número da Amostra</th>
                     <th>Opções</th>
                 </tr>
     		</thead>
@@ -28,6 +30,8 @@
 
                     <tr role="row" class="odd">
         				<td>{{$obj->descricao}}</td>
+        				<td>{{$obj->ponto_coleta}}</td>
+        				<td>{{$obj->numero_amostra}}</td>
         				<td class="d-flex justify-content-center">
 
                             <form action="{{ route('amostra.show', $obj->id) }}" method="GET" style="margin-right:10px;">

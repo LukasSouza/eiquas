@@ -18,9 +18,9 @@ function VerifyDuplicateEntry($model){
         if( ($code == 23000)
             && contains($message,"Duplicate")
             && contains($message,"Integrity constraint violation")) {
-                $errors = array("error" => "Erro. A descrição já existe!");
+                $errors = array("error" => "Erro. O Objeto cadastrado já existe!");
         } else {
-            // Not sure? show generic error
+            // Mostrar erro genérico
             $errors = array("error" => " Erro: Operação no banco de Dados!") ;
         }
 

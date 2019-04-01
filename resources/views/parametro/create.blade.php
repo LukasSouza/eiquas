@@ -13,7 +13,7 @@
 
                 <div class="card-body">
                     @if(isset($objeto))
-                        <form method="POST" action="{{ route('parametro.update', $objeto->id) }}">
+                        <form id="formulario" method="POST" action="{{ route('parametro.update', $objeto->id) }}">
                             {{ method_field('PUT') }}
                             @php
                                 $alteracao = $objeto->ObjetivoAlteracaoParametro()->first()->Alteracao()->first();
@@ -26,7 +26,7 @@
                                 //dd($categoria_parametro);
                             @endphp
                     @else
-                        <form method="POST" action="{{ route('parametro.store') }}">
+                        <form id="formulario" method="POST" action="{{ route('parametro.store') }}">
                     @endif
 
                         @csrf
@@ -149,7 +149,7 @@
                                             <label for="concentracao_superior" class="col-md-4 col-form-label text-md-right">{{ $categoria->qualidade }} ({{$categoria->nota}})*</label>
                                            
                                             <div class="col-md-6">
-                                                <input id="concentracao_superior{{$chave}}" type="text" class="form-control decimal" name="concentracao_superior[]" value="@if(isset($categoria_parametro)){{$categoria_parametro[$chave]->concentracao_superior}}@endif" maxlength="11" required autofocus>
+                                                <input id="concentracao_superior{{$chave}}" type="text" class="form-control decimal concentracao_superior" name="concentracao_superior[]" value="@if(isset($categoria_parametro)){{$categoria_parametro[$chave]->concentracao_superior}}@endif" maxlength="11" required autofocus>
 
                                                 @if ($errors->has('concentracao_superior'))
                                                     <span class="invalid-feedback">
@@ -166,7 +166,7 @@
                        
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="button" class="btn btn-primary" id="submit_button">
                                     {{ __('Salvar') }}
                                 </button>
 
@@ -179,4 +179,28 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('pagescript')
+<script>
+    function verificarConcentracoes(vetor){
+        for(var i = 1; i < vetor.length; i++){
+            if( parseFloat(vetor[i]) <= parseFloat(vetor[i-1]) )
+                return false;
+        }
+        return true;
+    }
+
+    $("#submit_button").on("click", function(){
+        var concentracoes = new Array();
+        $('.concentracao_superior').each(function(){
+            concentracoes.push($(this).val());
+        });
+
+        if(verificarConcentracoes(concentracoes))        
+            $("#formulario").submit();
+        else
+            alert('O valor das concentrações Superiores devem ser maiores gradativamente');
+    });
+</script>
 @endsection

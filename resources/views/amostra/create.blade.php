@@ -34,7 +34,7 @@
                         
                         {{-- OBJETIVO --}}
                         <div class="form-group row">
-                            <label for="objetivo" class="col-md-4 col-form-label text-md-right">{{ __('Objetivo da Análise') }}</label>
+                            <label for="objetivo" class="col-md-4 col-form-label text-md-right">{{ __('Objetivo da Avaliação') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control objetivo" name="objetivo" required >
@@ -118,11 +118,16 @@
 
                         {{-- CONDIÇÃO DO TEMPO --}}
                         <div class="form-group row">
-                            <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Condição Climática') }}</label>
+                            <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Condição do Tempo') }}</label>
 
                             <div class="col-md-6">
-                                <input id="condicao_tempo" type="text" class="form-control{{ $errors->has('condicao_tempo') ? ' is-invalid' : '' }}" name="condicao_tempo" value="@if(isset($objeto)){{$objeto->condicao_tempo}}@endif" required autofocus maxlength="45">
-
+                                <select class="form-control condicao_tempo" name="condicao_tempo" required >
+                                    <option value="">Selecione...</option>
+                                    <option value="Ensolarado" @if(isset($objeto) && $objeto->condicao_tempo == 'Ensolarado'){{ __("selected='selected'") }}@endif >Ensolarado</option>
+                                    <option value="Nublado sem chuvas" @if(isset($objeto) && $objeto->condicao_tempo == 'Nublado sem chuvas'){{ __("selected='selected'") }}@endif >Nublado sem chuvas</option>
+                                    <option value="Chuvoso" @if(isset($objeto) && $objeto->condicao_tempo == 'Chuvoso'){{ __("selected='selected'") }}@endif >Chuvoso</option>
+                                </select>
+                                
                                 @if ($errors->has('condicao_tempo'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('condicao_tempo') }}</strong>

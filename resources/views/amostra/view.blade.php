@@ -14,7 +14,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Resultado da análise:') }}</div>
                 <div class="card-body">
-                    <center><h3>Resultado da Análise</h3></center>
+                    <center><h3>Resultado da Avaliação</h3></center>
                     <table>
                         <tbody>
                             <tr>

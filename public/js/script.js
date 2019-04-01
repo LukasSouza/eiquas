@@ -84,7 +84,7 @@ $(document).ready( function () {
 
     });
 
-    var dataTableParam = $('#dataTableParam').dataTable({
+    var dataTableParam = $('#dataTableParam').DataTable({
         "columnDefs":
         [
             {
@@ -95,9 +95,7 @@ $(document).ready( function () {
                 "sortable": true
             }
         ],
-        "columnDefs": [
-            { "type": "num", "targets": 0 }
-        ],
+
         "oLanguage":
         {
             "sEmptyTable": "Nenhum registro encontrado",
@@ -123,8 +121,8 @@ $(document).ready( function () {
                 "sSortAscending": ": Ordenar colunas de forma ascendente",
                 "sSortDescending": ": Ordenar colunas de forma descendente"
             },
-            "order": [[ 0, 'asc' ], [ 1, 'asc' ]],
-        }
+        },
+        "order": [[ 0, "asc" ],[ 1, "asc" ]]
 
     });
 
