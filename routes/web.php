@@ -15,10 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('objetivo', 'ControllerObjetivo');
 Route::resource('alteracao', 'ControllerAlteracao');
 Route::resource('categoria', 'ControllerCategoria');
 Route::resource('parametro', 'ControllerParametro');
 Route::resource('atividade_preponderante', 'ControllerAtividadePreponderante');
 Route::resource('amostra', 'ControllerAmostra');
 Route::post('amostra/confirm', 'ControllerAmostra@confirm')->name('amostra.confirm');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
