@@ -36,7 +36,7 @@
         <nav class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 navbar navbar-expand-md navbar-light navbar-laravel fixed-top" >
             <div class="container-fluid">
                 <div class="col-8" id="divCabecalho">
-                    <a class="navbar-brand" href="{{ url('/home') }}">E-IQUAS</a>
+                    <a class="navbar-brand" href="{{ url('/') }}"><img src="{{asset('images/Eiquas.png')}}" alt="E-IQUAS" width="70"></a>
                     <a href="{{ route('alteracao.index') }}">Alteração</a>
                     <a href="{{ route('categoria.index') }}">Categoria</a>
                     <a href="{{ route('parametro.index') }}">Parametro</a>
@@ -50,7 +50,7 @@
         <div id="wrapper" class="toggleda">
             <!-- Page Content -->
             <div id="page-content-wrapper">
-                <div class="container-fluid py-3">
+                <div class="container-fluid py-5">
                     <main>
                         @yield('content')
                     </main>

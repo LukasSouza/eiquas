@@ -31,14 +31,14 @@
                                 </ul>
                             </div>
                         @endif
-                        
+
                         {{-- OBJETIVO --}}
                         <div class="form-group row">
                             <label for="objetivo" class="col-md-4 col-form-label text-md-right">{{ __('Objetivo da Avaliação') }}</label>
 
                             <div class="col-md-6">
                                 <select class="form-control objetivo" name="objetivo" required >
-                                                               
+
                                     @foreach ($objetivos as $objetivo)
                                         <option value="{{$objetivo->id}}" > {{$objetivo->descricao}} </option>
                                     @endforeach
@@ -57,7 +57,7 @@
 
                             <div class="col-md-6">
                                 <select class="form-control atividade_preponderante" name="atividade_preponderante" required >
-                                    <option id="selected" value="" selected="selected" >Selecione...</option>                              
+                                    <option id="selected" value="" selected="selected" >Selecione...</option>
                                     @foreach ($atividades_preponderantes as $atividade_preponderante)
                                         <option value="{{$atividade_preponderante->id}}" >{{$atividade_preponderante->descricao}}</option>
                                     @endforeach
@@ -85,7 +85,7 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                         {{-- PONTO DE COLETA --}}
                         <div class="form-group row">
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Ponto de Coleta') }}</label>
@@ -127,7 +127,7 @@
                                     <option value="Nublado sem chuvas" @if(isset($objeto) && $objeto->condicao_tempo == 'Nublado sem chuvas'){{ __("selected='selected'") }}@endif >Nublado sem chuvas</option>
                                     <option value="Chuvoso" @if(isset($objeto) && $objeto->condicao_tempo == 'Chuvoso'){{ __("selected='selected'") }}@endif >Chuvoso</option>
                                 </select>
-                                
+
                                 @if ($errors->has('condicao_tempo'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('condicao_tempo') }}</strong>
@@ -141,7 +141,7 @@
                             <label for="descricao" class="col-md-4 col-form-label text-md-right">{{ __('Numero da Amostra') }}</label>
 
                             <div class="col-md-6">
-                                <input id="numero_amostra" type="text" class="form-control decimal {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="numero_amostra" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="45">
+                                <input id="numero_amostra" type="text" class="form-control {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="numero_amostra" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="45">
 
                                 @if ($errors->has('numero_amostra'))
                                     <span class="invalid-feedback">
@@ -152,7 +152,7 @@
                         </div>
 
                          {{-- PARAMETROS --}}
-                            
+
                     </div>
                 </div>
 
@@ -164,11 +164,11 @@
                         <div class="form-group row content-param" id="body-param">
                             <div id="content-param">
                                 <label for="parametros" id='label-param' class="col-md-2 col-form-label text-md-right">Parametro</label>
-                                
+
                                 <div class="col-md-4">
                                     <select class="form-control parametros" name="parametros[]" required >
                                         <option id="selected" value="" selected="selected" >Selecione...</option>
-                                    
+
                                         @foreach ($parametros as $parametro)
                                             <option value="{{$parametro->id}}" >{{$parametro->descricao}} ({{$parametro->unidade_medida}})</option>
                                         @endforeach
@@ -195,7 +195,7 @@
                             </div>
                         </div>
                     </div>
-                </div> 
+                </div>
 
                 <div class="container">
                     <div class="form-group row mb-0">
@@ -243,14 +243,14 @@
             var parametros = '{{$parametros}}';
 
             var total_parametros = $("#total_parametros").val();
-            
+
             //Tela UPDATE
             if(total_parametros > 0){
                 var AtividadeParametroMinimo;
                 @if(isset($objeto))
                     AtividadeParametroMinimo = phpToJs("{{$objeto->AtividadeParametroMinimo}}");
                 @endif
-                
+
                 for(i = 1; i < total_parametros; i++){
                     botao_mais();
                 }
@@ -260,11 +260,11 @@
                     count++;
                     ocultarOpcaoSelecionada('.parametros');
                 });
-                
+
             }
 
             document.getElementById("mais").addEventListener ("click", botao_mais, false);
-            document.getElementById("menos").addEventListener ("click", botao_menos, false); 
+            document.getElementById("menos").addEventListener ("click", botao_menos, false);
 
             $('.parametros').each(function(){
                 $(document).on('change', '.parametros', function(){
@@ -273,7 +273,7 @@
             });
 
             function botao_mais(){
-                if(contador < total){ 
+                if(contador < total){
                     $('#body-param').last().append(existingdiv1);
                     contador++;
                     ocultarOpcaoSelecionada('.parametros');
@@ -306,7 +306,7 @@
 
             function retornaValoresSelecionados(selector) {
                 let array = new Array;
-                $(selector).each(function (indexInArray, valueOfElement) { 
+                $(selector).each(function (indexInArray, valueOfElement) {
                     array.push( $(valueOfElement).val() );
                 });
                 return array;
@@ -315,8 +315,8 @@
             function phpToJs(phpArray) {
                 return JSON.parse( phpArray.replace(/&quot;/g, '"') );
             }
-            
-            
+
+
         });
     </script>
 @endsection
