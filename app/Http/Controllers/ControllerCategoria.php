@@ -8,6 +8,12 @@ use App\Models\Categoria as Model;
 class ControllerCategoria extends Controller
 {
     var $rota_list = 'categoria';
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *

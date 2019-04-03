@@ -60,8 +60,8 @@
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Análise de Amostras</a></li>
                     @auth
-                        <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Usuarios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Usuarios</a></li> --}}
+                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Novo Usuário</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -89,6 +89,12 @@
     </div>
 
 </body>
+
+<footer>
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 navbar navbar-expand-md navbar-light navbar-laravel fixed-bottom" >
+
+    </div>
+</footer>
 
 <!-- Scripts -->
 {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}

@@ -7,6 +7,12 @@ use App\Models\Alteracao as Model;
 class ControllerAlteracao extends Controller
 {
     var $rota_list = 'alteracao';
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -90,7 +96,7 @@ class ControllerAlteracao extends Controller
         else{
             return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
         }
-        
+
     }
 
     /**
@@ -107,7 +113,7 @@ class ControllerAlteracao extends Controller
            echo "Código Invalido";
            return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro não encontrado no sistema');
         }
-        
+
         try{
             $objeto->delete();
         }
