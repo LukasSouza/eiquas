@@ -2,7 +2,15 @@
 @php
     $objeto = (object)$objeto;
     $alerta = 'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.<br>O resultado da Análise não será totalmente confiavel'
+    $analise_confiavel = 1;
+    $fk_user = null;
+
+    if(!empty($parametros_obrigatorios_nao_escolhidos)){
+        $analise_confiavel = 0;
+    }
+ 
 @endphp
+
 @section('content')
 
 <div class="container">
@@ -19,6 +27,8 @@
                     <form method="POST" action="{{ route('amostra.store') }}">
                         @csrf
                         <input type="hidden" name="array" value="{{serialize($objeto)}}">
+                        <input type="hidden" name="analise_confiavel" value="{{$analise_confiavel}}">
+                        <input type="hidden" name="fk_user" value="{{Auth::id()}}">
                         <input type="hidden" name="parametros_obrigatorios_nao_escolhidos" value="@if(!empty($parametros_obrigatorios_nao_escolhidos)){{$alerta}}@endif">
                         <center><h3>Dados da Amostra</h3></center>
                         <table>

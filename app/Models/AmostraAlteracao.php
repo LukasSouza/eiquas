@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-
-
 class AmostraAlteracao extends CompositeKeysBaseModel
 {
     protected $table = 'amostraalteracao';

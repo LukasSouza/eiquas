@@ -62,11 +62,13 @@ class ControllerAmostra extends Controller
         //Salvar Amostra
         $amostra = new Model;
         $amostra->descricao = $request->descricao;
+        $amostra->fk_user = $request->fk_user;
         $amostra->id_atividade_preponderante = $request->atividade_preponderante;
         $amostra->ponto_coleta = $request->ponto_coleta;
         $amostra->data_coleta = $request->data_coleta;
         $amostra->condicao_tempo = $request->condicao_tempo;
         $amostra->numero_amostra = $request->numero_amostra;
+        $amostra->analise_confiavel = $request->analise_confiavel;
 
 
         $duplicateEntry = VerifyDuplicateEntry($amostra);
