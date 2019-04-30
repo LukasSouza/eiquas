@@ -49,6 +49,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('O aplicativo e-IQUAS está preparado para avaliar águas que serão destinadas ao consumo humano, após tratamento para dequação de qualidade, se necessário.')!!}
                         </div>
 
                         {{-- ATIVIDADE PREPONDERANTE --}}
@@ -68,6 +69,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Indicar a atividade preponderante no local da coleta.')!!}
                         </div>
 
 
@@ -84,6 +86,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Informar resumidamente a motivação da amostra: monitoramento, avaliação, etc.')!!}
                         </div>
 
                         {{-- PONTO DE COLETA --}}
@@ -99,6 +102,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Informar resumidamente a motivação da amostra: monitoramento, avaliação, etc.')!!}
                         </div>
 
                         {{-- DATA DA COLETA --}}
@@ -134,6 +138,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Condição do tempo no momento da coleta.')!!}
                         </div>
 
                         {{-- NUMERO DA AMOSTRA --}}
@@ -149,6 +154,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Indentificador da amostra, que não pode se repetir no mesmo ponto de coleta.')!!}
                         </div>
 
                          {{-- PARAMETROS --}}
@@ -157,7 +163,7 @@
                 </div>
 
                 <div class="card">
-                    <div class="card-header">{{ __('Parâmetros Para Análise') }}</div>
+                    <div class="card-header">{{ __('Parâmetros Analisados') }}</div>
                     <div class="card-body">
                             <button type="button" class="btn btn-primary circular" id="mais">+</button>
                             <button type="button" class="btn btn-danger circular" id="menos">-</button>
@@ -165,12 +171,12 @@
                             <div id="content-param">
                                 <label for="parametros" id='label-param' class="col-md-2 col-form-label text-md-right">Parametro</label>
 
-                                <div class="col-md-4">
-                                    <select class="form-control parametros" name="parametros[]" required >
+                                <div class="col-md-3">
+                                    <select class="form-control parametros" name="parametros[]" required id="parametros" >
                                         <option id="selected" value="" selected="selected" >Selecione...</option>
 
                                         @foreach ($parametros as $parametro)
-                                            <option value="{{$parametro->id}}" >{{$parametro->descricao}} ({{$parametro->unidade_medida}})</option>
+                                            <option unidade="{{$parametro->unidade_medida}}" value="{{$parametro->id}}" >{{$parametro->descricao}} ({{$parametro->unidade_medida}})</option>
                                         @endforeach
                                     </select>
 
@@ -181,7 +187,7 @@
                                     @endif
                                 </div>
 
-                                <label for="concentracao" id='label-param' class="col-md-2 col-form-label text-md-right">Concentração</label>
+                                <label for="concentracao" id='label-param' class="col-md-3 col-form-label text-md-right">Resultado (<span id="unidade_resultado">ug/L</span>)</label>
 
                                 <div class="col-md-3">
                                     <input type="text" class="form-control decimal {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="11">
@@ -237,6 +243,7 @@
 @section('pagescript')
     <script>
         $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
             var existingdiv1 = $( "#body-param" ).html();
             var contador = 1;
             var total = {{sizeof($parametros)}};
@@ -316,7 +323,11 @@
                 return JSON.parse( phpArray.replace(/&quot;/g, '"') );
             }
 
-
+            $(document).on('change',".parametros", function(){
+                var unidade_medida = $('.parametros option:selected').attr('unidade');
+                console.log(unidade_medida);
+                $("#unidade_resultado").html(unidade_medida);
+            });
         });
     </script>
 @endsection

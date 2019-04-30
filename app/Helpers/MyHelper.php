@@ -26,6 +26,18 @@ function VerifyDuplicateEntry($model){
 
         return $errors;
     }
-    
+
     return false;
+}
+
+
+function showHelper($message){
+    return '
+        <div class="col-md-1 helper">
+            <a>
+                <i class="material-icons help_outline" data-toggle="tooltip" data-placement="right" title=""
+                data-original-title="'.$message.'">help_outline</i>
+            </a>
+        </div>
+    ';
 }

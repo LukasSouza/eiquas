@@ -39,7 +39,7 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td><b>Objetivo: </b></td>
+                                <td><b>Objetivo da Avaliação: </b></td>
                                 <td>{{$objetivo->descricao}}</td>
                             </tr>
                             <tr>
@@ -85,7 +85,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-12">
                                 <center>
-                                    
+
                                     <a class="btn btn-primary" href="{{ route('amostra.index') }}">{{ __('Voltar') }}</a>
                                 </center>
                             </div>
@@ -109,7 +109,7 @@
         }
         th, td {
             padding: 10px;
-            text-align: left;    
+            text-align: left;
         }
         center h3, table{
             margin:10px;

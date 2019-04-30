@@ -12,6 +12,7 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
@@ -35,6 +36,15 @@
     .navbar-expand-md .navbar-nav .nav-link {
         padding-right: 1rem;
         padding-left: 1rem;
+    }
+
+    .helper{
+        padding: 0px;
+        display: inline-block;
+    }
+    .helper i{
+        vertical-align: middle;
+        vertical-align: -webkit-baseline-middle;
     }
 </style>
 @yield('pagestyle')
@@ -99,9 +109,11 @@
 <!-- Scripts -->
 {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('js/script.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.8.5/jquery-ui.min.js" integrity="sha256-fOse6WapxTrUSJOJICXXYwHRJOPa6C1OUQXi7C9Ddy8=" crossorigin="anonymous"></script>
 
 
 @yield('pagescript')

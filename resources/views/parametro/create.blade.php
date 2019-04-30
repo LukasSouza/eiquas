@@ -41,7 +41,7 @@
                                 </ul>
                             </div>
                         @endif
-                        
+
                         {{-- NOME --}}
                         <div class="form-group row">
                             <label for="nome" class="col-md-4 col-form-label text-md-right">{{ __('Nome*') }}</label>
@@ -56,7 +56,7 @@
                                 @endif
                             </div>
                         </div>
-                        
+
                         {{-- ALTERACAO --}}
                         <div class="form-group row">
                             <label for="alteracao" class="col-md-4 col-form-label text-md-right">{{ __('Alteração*') }}</label>
@@ -69,6 +69,7 @@
                                     @endforeach
                                 </select>
                             </div>
+                            {!!showHelper('Natureza da alteração que o parâmetro produz na qualidade da água')!!}
                         </div>
 
                         {{-- UNIDADE --}}
@@ -86,15 +87,16 @@
                                     <option value="ESCALA" @if(isset($objeto) && $objeto->unidade_medida == 'ESCALA'){{ __("selected='selected'") }}@endif >ESCALA</option>
                                     <option value="P/A" @if(isset($objeto) && $objeto->unidade_medida == 'P/A'){{ __("selected='selected'") }}@endif >P/A</option>
                                 </select>
-                               
+
                                 @if ($errors->has('unidade'))
                                     <span class="invalid-feedback">
                                         <strong>{{ $errors->first('unidade') }}</strong>
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Unidade na qual o teor do parâmetro será informado')!!}
                         </div>
-                
+
                         {{-- NUMERO REGISTRO CAS --}}
                         <div class="form-group row">
                             <label for="numero_registro_cas" class="col-md-4 col-form-label text-md-right">{{ __('Numero de Registro CAS*') }}</label>
@@ -108,6 +110,7 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Chemical Abstracts Service Number')!!}
                         </div>
 
                         {{-- LIMITE CONAMA --}}
@@ -123,8 +126,9 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Valor máximo permitido (VMP) pelo CONAMA no uso preponderante para consumo humano')!!}
                         </div>
-                       
+
                         {{-- LIMITE OMS --}}
                         <div class="form-group row">
                             <label for="limite_oms" class="col-md-4 col-form-label text-md-right">{{ __('Limite OMS') }}</label>
@@ -138,16 +142,26 @@
                                     </span>
                                 @endif
                             </div>
+                            {!!showHelper('Valor de referência sugerido pela Organização Mudial de Saúde')!!}
                         </div>
-                     
+
                         {{-- CATEGORIAS --}}
                         <div class="card">
-                            <div class="card-header">{{ __('Categorias - Concentração Superior') }}</div>
+                            <div class="card-header">{{ __('Categorias - Concentração Superior') }} {!!showHelper('As categorias definem a nota a ser atribuída ao parâmetro, de acordo com o teor da substância na amostra.')!!}</div>
                                 <div class="card-body">
+                                    @php
+                                        $mensagens =
+                                        [
+                                            'Teor do parâmetro abaixo do qual a água pode ser considerada ÓTIMA',
+                                            'Teor do parâmetro, acima da concentração ótima, e abaixo do qual a água pode ser considerada BOA',
+                                            'Teor do parâmetro, acima da concentração boa, e abaixo do qual a água pode ser considerada REGULAR',
+                                            'Teor do parâmetro, acima do qual a água pode ser considerada RUIM'
+                                        ];
+                                    @endphp
                                     @foreach ($lista_categoria as $chave => $categoria)
                                         <div class="form-group row">
                                             <label for="concentracao_superior" class="col-md-4 col-form-label text-md-right">{{ $categoria->qualidade }} ({{$categoria->nota}})*</label>
-                                           
+
                                             <div class="col-md-6">
                                                 <input id="concentracao_superior{{$chave}}" type="text" class="form-control decimal concentracao_superior" name="concentracao_superior[]" value="@if(isset($categoria_parametro)){{$categoria_parametro[$chave]->concentracao_superior}}@endif" maxlength="11" required autofocus>
 
@@ -157,13 +171,14 @@
                                                     </span>
                                                 @endif
                                             </div>
+                                            {!!showHelper($mensagens[$chave])!!}
                                         </div>
-                                     
+
                                     @endforeach
                                 </div>
                             </div>
-                        </div> 
-                       
+                        </div>
+
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="button" class="btn btn-primary" id="submit_button">
@@ -183,6 +198,7 @@
 
 @section('pagescript')
 <script>
+$('[data-toggle="tooltip"]').tooltip();
     function verificarConcentracoes(vetor){
         for(var i = 1; i < vetor.length; i++){
             if( parseFloat(vetor[i]) <= parseFloat(vetor[i-1]) )
@@ -197,7 +213,7 @@
             concentracoes.push($(this).val());
         });
 
-        if(verificarConcentracoes(concentracoes))        
+        if(verificarConcentracoes(concentracoes))
             $("#formulario").submit();
         else
             alert('O valor das concentrações Superiores devem ser maiores gradativamente');
