@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php
     $objeto = (object)$objeto;
-    $alerta = 'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.<br>O resultado da Análise não será totalmente confiavel'
+    $alerta = 'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.<br>O resultado da Análise não será totalmente confiavel';
     $analise_confiavel = 1;
     $fk_user = null;
 

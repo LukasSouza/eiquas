@@ -46,6 +46,19 @@
         vertical-align: middle;
         vertical-align: -webkit-baseline-middle;
     }
+    footer div{
+        box-shadow: 0 -1px 6px rgb(0, 0, 0, 0.3);
+        padding: 15px 0px;
+    }
+     footer div{
+        text-align: center
+    }
+    footer div img{
+        margin: 0px 10px;
+    }
+    footer .navbar-laravel{
+        padding: 0px;
+    }
 </style>
 @yield('pagestyle')
 <body id="test2">
@@ -101,8 +114,11 @@
 </body>
 
 <footer>
-    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 navbar navbar-expand-md navbar-light navbar-laravel fixed-bottom" >
-
+    <div class="navbar-expand-md navbar-light navbar-laravel fixed-bottom" >
+        <div>
+            <img src="{{asset('images/nusol.png')}}" alt="" class="img-responsive" width="60" >
+            <img src="{{asset('images/onda_digital.png')}}" alt="" class="img-responsive" width="130">
+        </div>
     </div>
 </footer>
 
