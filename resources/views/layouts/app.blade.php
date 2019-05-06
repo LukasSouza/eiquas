@@ -23,7 +23,7 @@
 <style media="screen">
     #wrapper{
         margin-top: 53px;
-    }
+    } 
     #divCabecalho a{
         margin-right: 25px;
     }

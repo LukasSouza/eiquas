@@ -293,7 +293,7 @@
                     $('#content-param:last-child').remove();
                     contador--;
                     ocultarOpcaoSelecionada('.parametros');
-                }
+                } 
                 else
                     alert('Mínimo de um parâmetro obrigatorio para o cadastro!');
             }
