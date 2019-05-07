@@ -22,7 +22,7 @@
                     <th>Descricao</th>
                     <th>Ponto de Coleta</th>
                     <th>Número da Amostra</th>
-                    <th>Opções</th>
+                    <th>Relatórios</th>
                 </tr>
     		</thead>
     		<tbody>
@@ -36,7 +36,13 @@
 
                             <form action="{{ route('amostra.show', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
-               						<i class="glyphicon glyphicon-search"></i> Visualizar
+               						<i class="glyphicon glyphicon-search"></i> Resumo
+               				    </button>
+                            </form>
+
+                            <form action="{{ route('amostra.complete', $obj->id) }}" method="GET" style="margin-right:10px;">
+               					<button type="submit" class="btn btn-sm btn-primary">
+               						<i class="glyphicon glyphicon-search"></i> Completo
                				    </button>
                             </form>
 

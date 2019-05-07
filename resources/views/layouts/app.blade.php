@@ -21,9 +21,12 @@
     {{-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> --}}
 </head>
 <style media="screen">
+    #app{
+        margin-bottom: 100px;
+    }
     #wrapper{
         margin-top: 53px;
-    } 
+    }
     #divCabecalho a{
         margin-right: 25px;
     }

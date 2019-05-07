@@ -21,6 +21,7 @@ Route::resource('parametro', 'ControllerParametro');
 Route::resource('atividade_preponderante', 'ControllerAtividadePreponderante');
 Route::resource('amostra', 'ControllerAmostra');
 Route::post('amostra/confirm', 'ControllerAmostra@confirm')->name('amostra.confirm');
+Route::get('amostra/complete/{id}', 'ControllerAmostra@show_complete')->name('amostra.complete');
 
 Auth::routes();
 

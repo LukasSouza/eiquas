@@ -15,6 +15,9 @@ use App\Models\CategoriaParametro as CategoriaParametro;
 use App\Models\Parametro as Parametro;
 use function Opis\Closure\unserialize;
 use App\Models\Categoria;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 class ControllerAmostra extends Controller
 {
     var $rota_list = 'amostra';
@@ -33,7 +36,13 @@ class ControllerAmostra extends Controller
      */
     public function index()
     {
-        $objetos = Model::all()->sortBy('descricao');
+        //$objetos = Model::all()->sortBy('descricao');
+        if(Auth::check()){
+            $objetos = Model::where('fk_user',Auth::user()->id)->get();
+        }
+        else {
+            return view($this->rota_list.'.create');
+        }
         return view($this->rota_list.'.list',compact('objetos') );
     }
 
@@ -62,7 +71,7 @@ class ControllerAmostra extends Controller
         //Salvar Amostra
         $amostra = new Model;
         $amostra->descricao = $request->descricao;
-        $amostra->fk_user = $request->fk_user;
+        $amostra->fk_user = Auth::user()->id;
         $amostra->id_atividade_preponderante = $request->atividade_preponderante;
         $amostra->ponto_coleta = $request->ponto_coleta;
         $amostra->data_coleta = $request->data_coleta;
@@ -99,7 +108,7 @@ class ControllerAmostra extends Controller
                         echo $categoriaParametro->concentracao_superior ." > ". $request->concentracao[$key]."<br>";
                         $categoria = $categoriaParametro->fk_categoria;
                         break;
-                    } 
+                    }
                 }
                 //Salvando cada parametro e alteracao da amostra
                 $AmostraAlteracaoParametro = new AmostraAlteracaoParametro;
@@ -110,7 +119,7 @@ class ControllerAmostra extends Controller
                 $AmostraAlteracaoParametro->nota_parametro = $categoria;
                 $AmostraAlteracaoParametro->save();
             }
-        
+
             //calcular a Categoria (Nota), de cada alteracao
             $ArrayMenorConcentracaoAlteracao = Array();
             $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::leftJoin('categoria', 'nota_parametro', '=', 'categoria.id')->where('fk_amostra',$amostra->id)->get();
@@ -122,20 +131,20 @@ class ControllerAmostra extends Controller
                     }
                 }
             }
-        
+
             //Salvar Notas das alterações
             foreach($ArrayMenorConcentracaoAlteracao as $key => $nota){
                 $categoria = Categoria::where('nota', $nota)->first();
-    
+
                 $amostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->where('fk_alteracao',$array_fk_alteracoes[$key])->first();
                 $amostraAlteracao->nota_alteracao = $categoria->id;
                 $amostraAlteracao->save();
             }
-        
+
             //calcular a Categoria (Nota) da Amostra
             $notaAmostra = min($ArrayMenorConcentracaoAlteracao);
             $categoria = Categoria::where('nota', $notaAmostra)->first();
-        
+
             $amostraUpdate = Model::find($amostra->id);
             $amostraUpdate->eiquas = $categoria->id;
             $amostraUpdate->save();
@@ -163,14 +172,50 @@ class ControllerAmostra extends Controller
 
         $arrayAmostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->first();
         $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::where('fk_amostra', $amostra->id)->first();
-
+        $alteracoes = DB::table('alteracao')
+        ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
+        ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
+        ->select('alteracao.*', 'nota')
+        ->where('fk_amostra', '=', $id)
+        ->orWhereNull('fk_amostra')
+        ->orderBy('alteracao.id')
+        ->get();
         return view('amostra.view',
             ['amostra' => $amostra,
-             'objetivo' => $objetivo,  
-             'categoria' => $categoria, 
-             'arrayAmostraAlteracao' => $arrayAmostraAlteracao, 
+             'objetivo' => $objetivo,
+             'categoria' => $categoria,
+             'arrayAmostraAlteracao' => $arrayAmostraAlteracao,
              'ArrayAmostraAlteracaoParametro' => $ArrayAmostraAlteracaoParametro,
-             'atividadePreponderante' => $atividadePreponderante
+             'atividadePreponderante' => $atividadePreponderante,
+             'alteracoes' => $alteracoes
+            ]
+        );
+    }
+    public function show_complete($id)
+    {
+        $amostra = Model::find($id);
+        $objetivo = Objetivo::find(1);
+        $atividadePreponderante = AtividadePreponderante::where('id', $amostra->id_atividade_preponderante)->first();
+        $categoria = Categoria::where('id',$amostra->eiquas)->first();
+
+        $arrayAmostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->first();
+        $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::where('fk_amostra', $amostra->id)->first();
+        $alteracoes = DB::table('alteracao')
+        ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
+        ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
+        ->select('alteracao.*', 'nota')
+        ->where('fk_amostra', '=', $id)
+        ->orderBy('alteracao.id')
+        ->get();
+
+        return view('amostra.view_complete',
+            ['amostra' => $amostra,
+             'objetivo' => $objetivo,
+             'categoria' => $categoria,
+             'arrayAmostraAlteracao' => $arrayAmostraAlteracao,
+             'ArrayAmostraAlteracaoParametro' => $ArrayAmostraAlteracaoParametro,
+             'atividadePreponderante' => $atividadePreponderante,
+             'alteracoes' => $alteracoes
             ]
         );
     }

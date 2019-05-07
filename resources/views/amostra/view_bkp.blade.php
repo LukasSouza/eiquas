@@ -4,7 +4,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10 py-5">
+        <div class="col-md-8 py-5">
             @if (!empty($parametros_obrigatorios_nao_escolhidos))
                 <div class="alert alert-danger">
                    {{'Atenção! Existem parâmetros Obrigatórios para esta amostra que não foram selecionados.'}}<br>
@@ -12,52 +12,59 @@
                 </div>
             @endif
             <div class="card">
-                <div class="card-header">{{ __('Resumo da análise:') }}</div>
+                <div class="card-header">{{ __('Resultado da análise:') }}</div>
                 <div class="card-body">
-                    <center><h3>Índice de Qualidade da Água (E-IQUAS)</h3></center>
+                    <center><h3>Resultado da Avaliação</h3></center>
                     <table>
                         <tbody>
                             <tr>
-                                <td colspan="6"><b>Amostra: </b>{{$amostra->numero_amostra}}</td>
-                                <td colspan="6"><b>Data da Coleta: </b>{{$amostra->data_coleta}}</td>
+                                <td><b>Categoria: </b></td>
+                                <td>{{$categoria->descricao}}</td>
                             </tr>
                             <tr>
-                                <td colspan="6"><b>Ponto de Coleta: </b>{{$amostra->ponto_coleta}}</td>
-                                <td colspan="6"><b>Condição do Tempo: </b>{{$amostra->condicao_tempo}}</td>
+                                <td><b>Nota: </b></td>
+                                <td>{{$categoria->nota}}</td>
                             </tr>
                             <tr>
-                                <td colspan="12"><b>Atividade Preponderante: </b>{{$atividadePreponderante->descricao}}</td>
+                                <td><b>Qualidade: </b></td>
+                                <td>{{$categoria->qualidade}}</td>
                             </tr>
                             <tr>
-                                <td colspan="12"><b>Descrição: </b>{{$amostra->descricao}}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="12"><b>Objetivo da Avaliação: </b>{{$objetivo->descricao}}</td>
+                                <td><b>Semáforo: </b></td>
+                                <td>{{$categoria->semaforo}}</td>
                             </tr>
                         </tbody>
                     </table>
-
-                    <center><h3>Grupo Modificador de qualidade: </h3></center>
-                    <table>
-                        <tbody>
-                            @foreach ($alteracoes as $alteracao)
-                                <tr>
-                                    <td><b>{{$alteracao->descricao}}: </b></td>
-                                    <td>@if(isset($alteracao->nota)){{$alteracao->nota}}@else Não Avaliado @endif</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <center><h3>Resultado: </h3></center>
+                    <center><h3>Dados da Amostra</h3></center>
                     <table>
                         <tbody>
                             <tr>
-                                <td colspan="6"><b>Indice de Qualidade da Água (E-IQUAS): </b></td>
-                                <td colspan="6">{{$categoria->nota}}</td>
+                                <td><b>Objetivo da Avaliação: </b></td>
+                                <td>{{$objetivo->descricao}}</td>
                             </tr>
                             <tr>
-                                <td colspan="6"><b>Indica que a Amostra Está:</b></td>
-                                <td colspan="6">{{$categoria->qualidade}}</td>
+                                <td><b>Atividade Preponderante: </b></td>
+                                <td>{{$atividadePreponderante->descricao}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Descrição: </b></td>
+                                <td>{{$amostra->descricao}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Ponto de Coleta: </b></td>
+                                <td>{{$amostra->ponto_coleta}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Data da Coleta: </b></td>
+                                <td>{{$amostra->data_coleta}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Condição do Tempo: </b></td>
+                                <td>{{$amostra->condicao_tempo}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Numero da Amostra: </b></td>
+                                <td>{{$amostra->numero_amostra}}</td>
                             </tr>
                         </tbody>
                     </table>
