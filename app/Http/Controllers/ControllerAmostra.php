@@ -36,9 +36,10 @@ class ControllerAmostra extends Controller
      */
     public function index()
     {
-        //$objetos = Model::all()->sortBy('descricao');
+
         if(Auth::check()){
-            $objetos = Model::where('fk_user',Auth::user()->id)->get();
+            $objetos = Model::all()->sortBy('descricao');
+            // $objetos = Model::where('fk_user',Auth::user()->id)->get();
         }
         else {
             return view($this->rota_list.'.create');
