@@ -177,10 +177,12 @@ class ControllerAmostra extends Controller
         ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
         ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
         ->select('alteracao.*', 'nota')
-        ->where('fk_amostra', '=', $id)
-        ->orWhereNull('fk_amostra')
-        ->orderBy('alteracao.id')
+        // ->where('fk_amostra', '=', $id)
+        // ->orWhereNull('fk_amostra')
+        ->orderBy('alteracao.descricao')
         ->get();
+
+        // dd($alteracoes);
         return view('amostra.view',
             ['amostra' => $amostra,
              'objetivo' => $objetivo,

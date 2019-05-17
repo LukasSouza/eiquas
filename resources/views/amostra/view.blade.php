@@ -37,7 +37,7 @@
                         </tbody>
                     </table>
 
-                    <center><h3>Grupo Modificador de qualidade: </h3></center>
+                    <center><h3>Grupo Modificador de Qualidade: </h3></center>
                     <table>
                         <tbody>
                             @foreach ($alteracoes as $alteracao)
@@ -56,7 +56,7 @@
                                 <td colspan="6">{{$categoria->nota}}</td>
                             </tr>
                             <tr>
-                                <td colspan="6"><b>Indica que a Amostra Está:</b></td>
+                                <td colspan="6"><b>Indica que a amostra está:</b></td>
                                 <td colspan="6">{{$categoria->qualidade}}</td>
                             </tr>
                         </tbody>
