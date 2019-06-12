@@ -187,7 +187,7 @@
                                     @endif
                                 </div>
 
-                                <label for="concentracao" id='label-param' class="col-md-3 col-form-label text-md-right">Resultado (<span id="unidade_resultado">ug/L</span>)</label>
+                                <label for="concentracao" id='label-param' class="col-md-3 col-form-label text-md-right">Resultado <!--span id="unidade_resultado">ug/L</span--></label>
 
                                 <div class="col-md-3">
                                     <input type="text" class="form-control decimal {{ $errors->has('numero_amostra') ? ' is-invalid' : '' }}" name="concentracao[]" value="@if(isset($objeto)){{$objeto->numero_amostra}}@endif" required autofocus maxlength="11">
@@ -279,6 +279,15 @@
                 });
             });
 
+            $("#data_coleta").on("change", function(){
+                var data_hoje = new Date();
+                var data_coleta = $(this).val();
+                if( (new Date(data_coleta).getTime() > new Date(data_hoje).getTime())){
+                    alert("A data da coleta não pode ser superior a data atual.");
+                    $(this).val("");
+                }
+            });
+
             function botao_mais(){
                 if(contador < total){
                     $('#body-param').last().append(existingdiv1);
@@ -323,10 +332,12 @@
                 return JSON.parse( phpArray.replace(/&quot;/g, '"') );
             }
 
+
+           
             $(document).on('change',".parametros", function(){
                 var unidade_medida = $('.parametros option:selected').attr('unidade');
-                console.log(unidade_medida);
-                $("#unidade_resultado").html(unidade_medida);
+                //console.log(unidade_medida);
+               // $("#unidade_resultado").html(unidade_medida);
             });
         });
     </script>

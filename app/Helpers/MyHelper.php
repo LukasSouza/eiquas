@@ -30,6 +30,13 @@ function VerifyDuplicateEntry($model){
     return false;
 }
 
+function converterData( $data ){
+    if ($data == '' )
+        return null;
+    $date = date_create_from_format('Y-m-d', substr($data , 0 , 10));
+    return date_format($date, 'd/m/Y');
+}
+
 
 function showHelper($message){
     return '

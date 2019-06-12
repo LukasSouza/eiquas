@@ -19,7 +19,7 @@
                         <tbody>
                             <tr>
                                 <td colspan="6"><b>Amostra: </b>{{$amostra->numero_amostra}}</td>
-                                <td colspan="6"><b>Data da Coleta: </b>{{$amostra->data_coleta}}</td>
+                                <td colspan="6"><b>Data da Coleta: </b>{{converterData($amostra->data_coleta)}}</td>
                             </tr>
                             <tr>
                                 <td colspan="6"><b>Ponto de Coleta: </b>{{$amostra->ponto_coleta}}</td>

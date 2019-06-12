@@ -17,6 +17,7 @@ use function Opis\Closure\unserialize;
 use App\Models\Categoria;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Alteracao;
 
 class ControllerAmostra extends Controller
 {
@@ -67,18 +68,21 @@ class ControllerAmostra extends Controller
     {
         //inicializando a categoria
         $categoria =4;
+        $analise_confiavel = $request->analise_confiavel;
         $request = unserialize($request->array);
         //dd($request);
         //Salvar Amostra
         $amostra = new Model;
         $amostra->descricao = $request->descricao;
-        $amostra->fk_user = Auth::user()->id;
+        if(Auth::check())
+            $amostra->fk_user = Auth::user()->id;
+
         $amostra->id_atividade_preponderante = $request->atividade_preponderante;
         $amostra->ponto_coleta = $request->ponto_coleta;
         $amostra->data_coleta = $request->data_coleta;
         $amostra->condicao_tempo = $request->condicao_tempo;
         $amostra->numero_amostra = $request->numero_amostra;
-        $amostra->analise_confiavel = $request->analise_confiavel;
+        $amostra->analise_confiavel = $analise_confiavel;
 
 
         $duplicateEntry = VerifyDuplicateEntry($amostra);
@@ -176,12 +180,12 @@ class ControllerAmostra extends Controller
         $alteracoes = DB::table('alteracao')
         ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
         ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
-        ->select('alteracao.*', 'nota')
-        // ->where('fk_amostra', '=', $id)
-        // ->orWhereNull('fk_amostra')
+        ->select('alteracao.id', 'alteracao.descricao', 'nota')
+        ->where('fk_amostra', '=', $id)
+        ->orWhereNull('fk_amostra')
+        ->groupBy('alteracao.descricao', 'alteracao.id', 'nota')
         ->orderBy('alteracao.descricao')
         ->get();
-
         // dd($alteracoes);
         return view('amostra.view',
             ['amostra' => $amostra,

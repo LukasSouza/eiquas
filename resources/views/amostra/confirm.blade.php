@@ -51,7 +51,7 @@
                                 </tr>
                                 <tr>
                                     <td><b>Data da Coleta: </b></td>
-                                    <td>{{$objeto->data_coleta}}</td>
+                                    <td>{{converterData($objeto->data_coleta)}}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Condição do Tempo: </b></td>
@@ -70,7 +70,7 @@
                                     <tr>
                                         <td><b>Parametro: </b></td>
                                         <td>{{$objeto->parametros_desc[$i]}}</td>
-                                        <td><b>Concentração: </b></td>
+                                        <td><b>Resultado: </b></td>
                                         <td>{{$objeto->concentracao[$i]}}</td>
                                     </tr>
                                 @endfor
