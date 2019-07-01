@@ -20,7 +20,7 @@
             <thead>
     			<tr>
                     <th>Descricao</th>
-                    <th>Opções</th>
+                    @auth <th>Opções</th> @endauth
                 </tr>
     		</thead>
     		<tbody>
@@ -28,7 +28,8 @@
 
                     <tr role="row" class="odd">
         				<td>{{$obj->descricao}}</td>
-        				<td class="d-flex justify-content-center">
+                        @auth
+                        <td class="d-flex justify-content-center">
 
                             <form action="{{ route('atividade_preponderante.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
@@ -46,6 +47,7 @@
 
 
         				</td>
+                        @endauth
         			</tr>
                 @endforeach
 

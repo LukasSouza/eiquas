@@ -63,7 +63,7 @@ class ControllerParametro extends Controller
                 $CategoriaParametro->concentracao_superior = str_replace(',', '.', $concentracao_superior);
                 $CategoriaParametro->save();
             }
-        
+
             return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastrado Realizado com Sucesso!');
         }
         else{
@@ -90,9 +90,14 @@ class ControllerParametro extends Controller
      */
     public function edit($id)
     {
-        $objeto=Model::find($id);
-        //print_r($objeto->ObjetivoAlteracaoParametro()->first()->Alteracao()->first());
-        return view($this->rota_list.'.create', compact('objeto') );
+        if(Auth::user()){
+            $objeto=Model::find($id);
+            return view($this->rota_list.'.create', compact('objeto') );
+        }
+        else {
+            return $this->index();
+        }
+
     }
 
     /**
@@ -154,7 +159,7 @@ class ControllerParametro extends Controller
         catch(\Exception $e){
             return redirect()->route($this->rota_list.'.index')->with('error', 'Falha ao Excluir. Verifique se o item está sendo usado por algum cadastro no sistema.');
         }
-        
+
         return redirect()->route($this->rota_list.'.index')->with('status', 'Cadastro Excluido com Sucesso');
     }
 }

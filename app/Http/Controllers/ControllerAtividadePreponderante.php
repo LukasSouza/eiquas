@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\AtividadePreponderante as Model;
 use App\Models\AtividadeParametroMin as AtividadeParametroMin;
+use Illuminate\Support\Facades\Auth;
 
 class ControllerAtividadePreponderante extends Controller
 {
@@ -77,8 +78,13 @@ class ControllerAtividadePreponderante extends Controller
      */
     public function edit($id)
     {
-        $objeto=Model::find($id);
-        return view($this->rota_list.'.create', compact('objeto') );
+        if(Auth::user()){
+            $objeto=Model::find($id);
+            return view($this->rota_list.'.create', compact('objeto') );
+        }
+        else {
+            return $this->index();
+        }
     }
 
     /**
@@ -109,7 +115,7 @@ class ControllerAtividadePreponderante extends Controller
         else{
             return redirect()->route($this->rota_list.'.index')->with(key($duplicateEntry), current($duplicateEntry) );
         }
-        
+
     }
 
     /**
