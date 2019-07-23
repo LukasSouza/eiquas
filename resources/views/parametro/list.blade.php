@@ -24,7 +24,7 @@
                     <th>Numero do Registro CAS</th>
                     <th>Limite CONAMA</th>
                     <th>Limite OMS</th>
-                    <th>Opções</th>
+                    @auth<th>Opções</th>@endauth
                 </tr>
     		</thead>
     		<tbody>
@@ -39,7 +39,8 @@
         				<td>{{$obj->numero_registro_cas}}</td>
         				<td>{{$obj->limite_conama}}</td>
         				<td>{{$obj->limite_oms}}</td>
-        				<td class="d-flex justify-content-center">
+                        @auth
+                        <td class="d-flex justify-content-center">
 
                             <form action="{{ route('parametro.edit', $obj->id) }}" method="GET" style="margin-right:10px;">
                					<button type="submit" class="btn btn-sm btn-primary">
@@ -56,6 +57,7 @@
                             </form>
 
         				</td>
+                        @endauth
         			</tr>
                 @endforeach
 
