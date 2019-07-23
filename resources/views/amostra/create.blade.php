@@ -49,7 +49,7 @@
                                     </span>
                                 @endif
                             </div>
-                            {!!showHelper('O aplicativo e-IQUAS está preparado para avaliar águas que serão destinadas ao consumo humano, após tratamento para dequação de qualidade, se necessário.')!!}
+                            {!!showHelper('O aplicativo e-IQUAS está preparado para avaliar águas que serão destinadas ao consumo humano, após tratamento para adequação de qualidade, se necessário.')!!}
                         </div>
 
                         {{-- ATIVIDADE PREPONDERANTE --}}
@@ -102,7 +102,7 @@
                                     </span>
                                 @endif
                             </div>
-                            {!!showHelper('Informar resumidamente a motivação da amostra: monitoramento, avaliação, etc.')!!}
+                            {!!showHelper('Mnemônico que identifique local exato de coleta')!!}
                         </div>
 
                         {{-- DATA DA COLETA --}}
