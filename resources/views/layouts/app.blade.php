@@ -89,7 +89,7 @@
                         {{-- <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Usuarios</a></li> --}}
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Novo Usuário</a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador - {{ Auth::user()->name }}</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                     {{ csrf_field() }}
