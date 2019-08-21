@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Alteracao as Model;
+use Auth;
 class ControllerAlteracao extends Controller
 {
     var $rota_list = 'alteracao';

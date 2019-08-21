@@ -8,6 +8,7 @@ use App\Models\Parametro as Model;
 use App\Models\ObjetivoAlteracaoParametro as ObjetivoAlteracaoParametro;
 use App\Models\CategoriaParametro as CategoriaParametro;
 use App\Models\AmostraAlteracaoParametro as AmostraAlteracaoParametro;
+use Auth;
 
 class ControllerParametro extends Controller
 {

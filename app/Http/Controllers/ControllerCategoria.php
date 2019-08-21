@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Categoria;
 use Illuminate\Http\Request;
 use App\Models\Categoria as Model;
+use Auth;
 class ControllerCategoria extends Controller
 {
     var $rota_list = 'categoria';

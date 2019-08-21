@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use App\User as Model;
+use Auth;
 
 class ControllerUser extends Controller
 {
