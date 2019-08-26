@@ -62,7 +62,7 @@
     footer .navbar-laravel{
         padding: 0px;
     }
-</style>
+</style> 
 @yield('pagestyle')
 <body id="test2">
     <div id="app">
