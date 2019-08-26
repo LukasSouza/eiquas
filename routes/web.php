@@ -23,6 +23,9 @@ Route::resource('amostra', 'ControllerAmostra');
 Route::post('amostra/confirm', 'ControllerAmostra@confirm')->name('amostra.confirm');
 Route::get('amostra/complete/{id}', 'ControllerAmostra@show_complete')->name('amostra.complete');
 
+Route::get('password', 'PasswordResetController@editPassword')->name('passwordReset.editPassword');
+Route::patch('password', 'PasswordResetController@updatePassword')->name('passwordReset.updatePassword');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

@@ -83,7 +83,7 @@
                             <a class="dropdown-item" href="{{ route('parametro.index') }}">Parametro</a>
                             <a class="dropdown-item" href="{{ route('atividade_preponderante.index') }}">Atividade Preponderante</a>
                         </div>
-                    </li>
+                    </li> 
                     <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Análise de Amostras</a></li>
                     @auth
                         {{-- <li class="nav-item"><a class="nav-link" href="{{ route('amostra.index') }}">Usuarios</a></li> --}}
@@ -91,6 +91,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administrador - {{ Auth::user()->name }}</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{{ route('passwordReset.editPassword') }}">Mudar Senha</a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST">
                                     {{ csrf_field() }}
                                     <button class="dropdown-item" type="submit">Sair</button>
