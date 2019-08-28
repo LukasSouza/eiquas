@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@php
+    if(\Auth::check())
+        redirect()->route('home');
+@endphp
+
 @section('content')
     <div class="content">
         <div class="title m-b-md">

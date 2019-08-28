@@ -177,7 +177,23 @@ class ControllerAmostra extends Controller
 
         $arrayAmostraAlteracao = AmostraAlteracao::where('fk_amostra', $amostra->id)->first();
         $ArrayAmostraAlteracaoParametro = AmostraAlteracaoParametro::where('fk_amostra', $amostra->id)->first();
-        $alteracoes = DB::table('alteracao')
+        //Criar um vetor com alterações nulas, para depois substituir as alterações existentes nele.. Dessa forma, sempre vai existir as 7 alterações do sistema para o relatorio
+        $alteracoes_null = DB::table('alteracao')
+        ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
+        ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
+        ->select('alteracao.id', 'alteracao.descricao')
+        ->groupBy('alteracao.descricao', 'alteracao.id')
+        ->orderBy('alteracao.descricao')
+        ->get();
+        //$alteracoes_null = Alteracao::all();
+
+        $alteracoes = [];
+        foreach($alteracoes_null as $alteracao){
+            $alteracao->nota = null;
+            $alteracoes[] = $alteracao;
+        }
+        //dd($alteracoes);
+        $alteracoes_existentes = DB::table('alteracao')
         ->leftJoin('amostraalteracao', 'alteracao.id', '=', 'amostraalteracao.fk_alteracao' )
         ->leftJoin('categoria', 'categoria.id', '=', 'nota_alteracao' )
         ->select('alteracao.id', 'alteracao.descricao', 'nota')
@@ -186,6 +202,14 @@ class ControllerAmostra extends Controller
         ->groupBy('alteracao.descricao', 'alteracao.id', 'nota')
         ->orderBy('alteracao.descricao')
         ->get();
+        foreach($alteracoes_existentes as $alteracao_existente){
+            foreach($alteracoes as $key => $alteracao){
+                if($alteracao_existente->id == $alteracao->id){
+                    $alteracao->nota = $alteracao_existente->nota;
+                    $alteracoes[$key] = $alteracao;
+                }
+            }
+        }
         // dd($alteracoes);
         return view('amostra.view',
             ['amostra' => $amostra,
